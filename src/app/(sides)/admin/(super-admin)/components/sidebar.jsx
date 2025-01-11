@@ -31,62 +31,71 @@ const Sidebar = () => {
         <ul className="space-y-6 text-base">
           <li className="flex items-center gap-3 hover:bg-gray-700 p-3 rounded-lg transition-all">
             <MdDashboard size={20} />
-            <Link href="#dashboard" className="flex-1">
+            <Link href="/admin/dashboard" className="flex-1">
               Dashboard
             </Link>
           </li>
           <li className="flex items-center gap-3 hover:bg-gray-700 p-3 rounded-lg transition-all">
+            <FaClipboardList size={20} />
+            <Link href="/admin/sales-report" className="flex-1">
+              Sales report
+            </Link>
+          </li>
+          <li className="flex items-center gap-3 hover:bg-gray-700 p-3 rounded-lg transition-all">
             <FaUsers size={20} />
-            <Link href="#users-list" className="flex-1">
+            <Link href="/admin/users-list" className="flex-1">
               Users List
             </Link>
           </li>
           <li className="flex items-center gap-3 hover:bg-gray-700 p-3 rounded-lg transition-all">
             <MdPerson size={20} />
-            <Link href="#tailor-list" className="flex-1">
+            <Link href="/admin/tailor-list" className="flex-1">
               Tailor List
             </Link>
           </li>
           <li className="flex items-center gap-3 hover:bg-gray-700 p-3 rounded-lg transition-all">
-            <FaTruck size={20} />
-            <Link href="#delivery-boy-list" className="flex-1">
-              Delivery Boy List
-            </Link>
-          </li>
-          <li className="flex items-center gap-3 hover:bg-gray-700 p-3 rounded-lg transition-all">
             <MdOutlineLocalLaundryService size={20} />
-            <Link href="#laundry-list" className="flex-1">
+            <Link href="/admin/laundry-list" className="flex-1">
               Laundry List
             </Link>
           </li>
           <li className="flex items-center gap-3 hover:bg-gray-700 p-3 rounded-lg transition-all">
-            <FaEnvelope size={20} />
-            <Link href="#messages" className="flex-1">
-              Messages
-            </Link>
-          </li>
-          <li className="flex items-center gap-3 hover:bg-gray-700 p-3 rounded-lg transition-all">
             <FaClipboardList size={20} />
-            <Link href="#rental-product-list" className="flex-1">
+            <Link href="/admin/rental-products" className="flex-1">
               Rental Products
             </Link>
           </li>
+         
+         
+          <li className="flex items-center gap-3 hover:bg-gray-700 p-3 rounded-lg transition-all">
+            <FaEnvelope size={20} />
+            <Link href="/admin/messages" className="flex-1">
+              Messages
+            </Link>
+          </li>
+         
           <li className="flex items-center gap-3 hover:bg-gray-700 p-3 rounded-lg transition-all">
             <FaShoppingCart size={20} />
-            <Link href="#cloth-list" className="flex-1">
+            <Link href="/admin/cloth-list" className="flex-1">
               Cloth List
             </Link>
           </li>
           <li className="flex items-center gap-3 hover:bg-gray-700 p-3 rounded-lg transition-all">
             <MdDesignServices size={20} />
-            <Link href="#design-list" className="flex-1">
+            <Link href="/admin/design-list" className="flex-1">
               Design List
             </Link>
           </li>
           <li className="flex items-center gap-3 hover:bg-gray-700 p-3 rounded-lg transition-all">
             <FaClipboardList size={20} />
-            <Link href="#orders" className="flex-1">
+            <Link href="/admin/order-list" className="flex-1">
               Orders
+            </Link>
+          </li>
+          <li className="flex items-center gap-3 hover:bg-gray-700 p-3 rounded-lg transition-all">
+            <FaTruck size={20} />
+            <Link href="/admin/deliveryboy-list" className="flex-1">
+              Delivery Boy List
             </Link>
           </li>
         </ul>
