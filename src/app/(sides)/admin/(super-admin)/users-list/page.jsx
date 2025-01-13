@@ -2,16 +2,16 @@
 
 import React, { useState } from "react";
 import {
-  useBlockOrUnblockUser,
-  usefetchAllUsers,
+  UseBlockOrUnblockUser,
+  UsefetchAllUsers,
 } from "../../../../../hooks/usersHooks";
 
 const UserListPage = () => {
   const [searchQuery, setSearchQuery] = useState("");
 
-  const { data: users = [], isLoading, isError, error } = usefetchAllUsers();
+  const { data: users = [], isLoading, isError, error } = UsefetchAllUsers();
 
-  const { mutate: userBlockOrUnblock } = useBlockOrUnblockUser();
+  const { mutate: userBlockOrUnblock } = UseBlockOrUnblockUser();
 
   const toggleStatus = (id) => {
     console.log("workin", id);
