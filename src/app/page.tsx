@@ -1,5 +1,10 @@
+import AboutSection from "./(sides)/users/components/ui/aboutsc/aboutsc";
+import Banner from "./(sides)/users/components/ui/banner/banner";
 import Footer from "./(sides)/users/components/ui/footer/Footer";
 import Navbar from "./(sides)/users/components/ui/navbar/Navbar";
+import RentalItemCards from "./(sides)/users/components/ui/rentals/rentalsfl";
+import TailorItem from "./(sides)/users/components/ui/tailorsc/tailorsc";
+import WhyBelvoirSection from "./(sides)/users/components/ui/whyBelvoir/whysection";
 
 
 
@@ -9,12 +14,18 @@ export default function Home() {
     <>
       <Navbar/>
       
-       
+       <Banner/>
+
+      <RentalItemCards/>
+
+      <TailorItem/>
+
+      <WhyBelvoirSection/>
+
+      <AboutSection/>
 
       <Footer/>
 
-      <div className="h-96"></div>
-      <div className="h-96"></div>
       
     </>
 

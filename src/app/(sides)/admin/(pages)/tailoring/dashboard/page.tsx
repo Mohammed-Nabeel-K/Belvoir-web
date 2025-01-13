@@ -13,9 +13,8 @@ import { useState } from "react";
 import Metricscard from "../../../components/ui/tailor-merics-card/metricscard";
 import NotificationDropdown from "../../../components/ui/tailor-notification/notificationDropdown";
 import Ordertable from "../../../components/ui/tailor-order-table/ordertable";
-// import "../../../../styles/globals.css";
-// import Metricscard from "@/app/components/tailor-merics-card/metricscard";
-// import Ordertable from "@/app/components/tailor-order-table/ordertable";
+
+
 
 export default function Page() {
   const [drop, setDrop] = useState(false);
