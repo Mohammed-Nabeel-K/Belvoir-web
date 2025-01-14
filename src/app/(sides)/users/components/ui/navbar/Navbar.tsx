@@ -12,6 +12,7 @@ const Navbar = () => {
   };
 
   return (
+    <>
     <nav className="fixed top-0 left-0 right-0 z-50 bg-white/40 backdrop-blur-md">
       <div className="max-w-7xl mx-auto px-4 sm:px-6">
         <div className="flex items-center justify-between h-16">
@@ -27,7 +28,8 @@ const Navbar = () => {
             
             {/* Logo */}
             <Link href="#">
-            <div className="flex-shrink-0">
+            <div className="flex-shrink-0 flex gap-2">
+              <img src="/home/tie.png" alt="logo" className='w-8' />
               <h1 className="text-2xl font-serif tracking-wide">Belvoir.</h1>
             </div>
             </Link>
@@ -100,6 +102,10 @@ const Navbar = () => {
         </div>
       </div>
     </nav>
+    <div className='h-16'>
+
+    </div>
+  </>
   );
 };
 

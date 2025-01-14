@@ -7,7 +7,7 @@ const AboutSection: React.FC = () => {
         {/* Logo Section */}
         <div className="flex justify-center mb-8">
           <img
-            src="/path-to-your-logo.png" // Update with your logo's path
+            src="/home/tie.png" // Update with your logo's path
             alt="Company Logo"
             className="h-16 w-auto"
           />
@@ -24,21 +24,24 @@ const AboutSection: React.FC = () => {
 
         {/* Company Values */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-12">
-          <div className="bg-white shadow-lg p-6 rounded-lg text-center">
+          <div className="bg-white shadow-lg p-6 rounded-lg text-center flex flex-col items-center">
+            <img src="/home/clothing.png" alt="tailor" className="w-20" />
             <h3 className="text-2xl font-semibold text-gray-800 mb-4">Tailoring</h3>
             <p className="text-gray-600">
               We offer expert tailoring services to ensure your clothes fit perfectly. From custom-made outfits to alterations, our experienced tailors are dedicated to providing top-quality craftsmanship.
             </p>
           </div>
 
-          <div className="bg-white shadow-lg p-6 rounded-lg text-center">
+          <div className="bg-white shadow-lg p-6 rounded-lg text-center flex flex-col items-center">
+          <img src="/home/laundry-basket.png" alt="tailor" className="w-20" />
             <h3 className="text-2xl font-semibold text-gray-800 mb-4">Laundry</h3>
             <p className="text-gray-600">
               Our laundry services guarantee your garments are treated with the utmost care. We use eco-friendly detergents to clean and preserve the quality of your clothing while maintaining their freshness.
             </p>
           </div>
 
-          <div className="bg-white shadow-lg p-6 rounded-lg text-center">
+          <div className="bg-white shadow-lg p-6 rounded-lg text-center flex flex-col items-center">
+          <img src="/home/clothes-hanger.png" alt="tailor" className="w-20"/>
             <h3 className="text-2xl font-semibold text-gray-800 mb-4">Rentals</h3>
             <p className="text-gray-600">
               Need something for a special occasion or everyday use? We provide rentals for a wide variety of products, including clothing, accessories, and equipment. Affordable and convenient, we make sure you get what you need, when you need it.
