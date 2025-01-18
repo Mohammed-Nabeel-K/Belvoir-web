@@ -1,5 +1,6 @@
 "use client"
 import React, { useState } from "react";
+import { useFetchAllClothes } from "../../../../../hooks/clothesHook";
 
 const ClothList = () => {
   const [searchQuery, setSearchQuery] = useState("");
@@ -8,32 +9,8 @@ const ClothList = () => {
     setSearchQuery(e.target.value);
   };
 
-  const clothes = [
-    {
-      id: 1,
-      name: "Cotton Shirt",
-      image: "https://via.placeholder.com/100",
-      category: "Shirts",
-      price: "$25",
-      quantity: 50,
-    },
-    {
-      id: 2,
-      name: "Denim Jeans",
-      image: "https://via.placeholder.com/100",
-      category: "Pants",
-      price: "$40",
-      quantity: 30,
-    },
-    {
-      id: 3,
-      name: "Silk Scarf",
-      image: "https://via.placeholder.com/100",
-      category: "Accessories",
-      price: "$15",
-      quantity: 70,
-    },
-  ];
+  
+     const {data:clothes=[]}=useFetchAllClothes()
 
   return (
     <div className="min-h-screen p-6 bg-gray-100">

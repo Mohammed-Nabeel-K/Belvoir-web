@@ -1,13 +1,14 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { fetchUsers, userBlockOrUnblock } from "../api/users-api";
+import {  fetchUsers, userBlockOrUnblock } from "../api/users-api";
 
 
-export const UsefetchAllUsers = () => {
+export const UsefetchAllUsers =  (pagesize,pagenum,search,status) => {
   return useQuery({
     queryKey: ["users"],
-    queryFn: fetchUsers,
+    queryFn: ()=>fetchUsers(pagesize,pagenum,search,status)
   });
 };
+
 
 export const UseBlockOrUnblockUser = () => {
     const queryClient = useQueryClient();

@@ -80,11 +80,11 @@ const SalesBarChart = () => {
   };
 
   return (
-    <div className="bg-white p-3 rounded-lg shadow-md w-[600px] h-[200px] ml-2">
+    // <div className="bg-white p-3 rounded-lg shadow-md w-[600px] h-[200px] ml-2">
       <div>
         <Bar data={data} options={options} />
       </div>
-    </div>
+    // </div>
   );
 };
 

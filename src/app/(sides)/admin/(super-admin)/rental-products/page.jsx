@@ -1,7 +1,7 @@
 "use client"
 import React, { useState } from "react";
 import { UsefetchAllRentalProducts } from "../../../../../hooks/rentalProductsHoook";
-import { fetchRentalProducts } from "../../../../../api/rentalProducts-api";
+
 
 const RentalProductList = () => {
   const [searchQuery, setSearchQuery] = useState("");

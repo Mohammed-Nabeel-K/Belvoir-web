@@ -1,13 +1,27 @@
-import axios from "axios"
+import axiosInstance from "../../api/axiosinstance/axiosInstance";
 
+export const fetchTailors = async (pagesize, pagenum, search, status) => {
+  const response = await axiosInstance.get(
+    `/Admin/users/tailor?SearchTerm=${search}&IsBlocked=${status}&PageSize=${pagesize}&pageNo=${pagenum}`
+  );
 
-export const fetchTailors = async () => {
-  const response = await fetch('https://belvoir-rest-api.onrender.com/api/Admin/tailor');
-  if (!response.ok) throw new Error('Failed to fetch users');
-  return response.json();
+  return response.data;
 };
 
 export const tailorBlockOrUnblock = async (id) => {
-  const response = await axios.patch(`https://belvoir-rest-api.onrender.com/api/Admin/tailor/block-unblock/${id}`);
+  const response = await axiosInstance.patch(
+    `/Admin/tailor/block-unblock/${id}`
+  );
   return response.data;
-}
+};
+export const addTailor = async (values) => {
+  const response = await axiosInstance.post(`/Admin/add/tailor`, values);
+
+  return response.data;
+};
+
+export const deleteTailor = async (id) => {
+  console.log(id);
+  const response = await axiosInstance.delete(`/Admin/delete/tailor?id=${id}`);
+  return response.data;
+};
