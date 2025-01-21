@@ -60,6 +60,12 @@ const Sidebar = () => {
             </Link>
           </li>
           <li className="flex items-center gap-3 hover:bg-gray-700 p-3 rounded-lg transition-all">
+            <FaTruck size={20} />
+            <Link href="/admin/deliveryboy-list" className="flex-1">
+              Delivery Boy List
+            </Link>
+          </li>
+          <li className="flex items-center gap-3 hover:bg-gray-700 p-3 rounded-lg transition-all">
             <FaClipboardList size={20} />
             <Link href="/admin/rental-products" className="flex-1">
               Rental Products
@@ -67,12 +73,6 @@ const Sidebar = () => {
           </li>
          
          
-          <li className="flex items-center gap-3 hover:bg-gray-700 p-3 rounded-lg transition-all">
-            <FaEnvelope size={20} />
-            <Link href="/admin/messages" className="flex-1">
-              Messages
-            </Link>
-          </li>
          
           <li className="flex items-center gap-3 hover:bg-gray-700 p-3 rounded-lg transition-all">
             <FaShoppingCart size={20} />
@@ -92,12 +92,14 @@ const Sidebar = () => {
               Orders
             </Link>
           </li>
+          
           <li className="flex items-center gap-3 hover:bg-gray-700 p-3 rounded-lg transition-all">
-            <FaTruck size={20} />
-            <Link href="/admin/deliveryboy-list" className="flex-1">
-              Delivery Boy List
+            <FaEnvelope size={20} />
+            <Link href="/admin/messages" className="flex-1">
+              Feedback
             </Link>
           </li>
+          
         </ul>
       </div>
 
