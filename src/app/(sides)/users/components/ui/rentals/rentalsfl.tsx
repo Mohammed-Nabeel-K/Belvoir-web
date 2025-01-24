@@ -1,4 +1,7 @@
 import React from 'react';
+import Image from 'next/image';
+
+
 
 
 interface RentalItem {
@@ -84,53 +87,55 @@ const rentalItems: RentalItem[] = [
 
 const RentalItemCards: React.FC = () => {
   return (
-    
-     
-      
-      <div className="flex flex-col justify-center items-center min-h-screen "> 
+    <div className="flex flex-col justify-center items-center min-h-screen ">
       <div className="">
-      <p className='text-lg font-jacques font-bold'>Our Rentals :-</p>
-      <div className=" w-[1345px] h-96 flex items-center flex-row-reverse overflow-x-auto  gap-4 p-4 scrollbar-hide">
-        {rentalItems.map((item) => (
-          <div
-            key={item.id}
-            className="flex-shrink-0 w-[250px] h-[350px] bg-white rounded-lg shadow-md p-2 hover:scale-105 transition-transform"
-          >
-            <div className="flex justify-center  h-[200px] border rounded-sm">
-              <img src={item.image} alt="ing" />
-            </div>
-            <div className="">
-              <p>Item Name</p>
-              <p>its just a trila that i have to give description so </p>
-              <p>$40/day</p>
-              <div className="flex justify-between">
-                <div className="bg-slate-900 text-white rounded-sm text-xs flex items-center p-2">
-                  Add To cart
-                </div>
-                <div className="bg-slate-900 text-white rounded-sm text-xs flex items-center px-6">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-4 w-4"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor" 
-                    strokeWidth="2" 
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M5 12h14M12 5l7 7-7 7"
-                    />
-                  </svg>
+        <p className="text-lg font-jacques font-bold">Our Rentals :-</p>
+        <div className=" w-[1345px] h-96 flex items-center flex-row-reverse overflow-x-auto  gap-4 p-4 scrollbar-hide">
+          {rentalItems.map((item) => (
+            <div
+              key={item.id}
+              className="flex-shrink-0 w-[250px] h-[350px] bg-white rounded-lg shadow-md p-2 hover:scale-105 transition-transform"
+            >
+              <div className="flex justify-center  h-[200px] border rounded-sm">
+                <Image
+                  src={item.image}
+                  alt="itm"
+                  width={800}
+                  height={800}
+                  priority
+                />
+              </div>
+              <div className="">
+                <p>Item Name</p>
+                <p>its just a trila that i have to give description so </p>
+                <p>$40/day</p>
+                <div className="flex justify-between">
+                  <div className="bg-slate-900 text-white rounded-sm text-xs flex items-center p-2">
+                    Add To cart
+                  </div>
+                  <div className="bg-slate-900 text-white rounded-sm text-xs flex items-center px-6">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="h-4 w-4"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M5 12h14M12 5l7 7-7 7"
+                      />
+                    </svg>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-        ))}
+          ))}
+        </div>
       </div>
-     </div>
     </div>
-    
   );
 };
 

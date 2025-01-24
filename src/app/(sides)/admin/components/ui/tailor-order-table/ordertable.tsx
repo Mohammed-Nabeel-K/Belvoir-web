@@ -1,9 +1,31 @@
-interface OrdertableProps {
-  height: string;
+import type React from "react";
+
+interface Order {
+  id: number;
+  name: string;
+  date: string;
+  status: "Pending" | "Shipped" | "Delivered" | "Cancelled";
+  deadline: string;
 }
 
-export default function Ordertable({ height }: OrdertableProps) {
-  const data = [
+// Status color mapping for consistent styling
+const statusStyles = {
+  Shipped: "text-blue-600 ",
+  Delivered: "text-green-600 ",
+  Cancelled: "text-red-600 ",
+  Pending: "text-yellow-600 "
+};
+
+const OrderTable: React.FC<{ height?: string }> = ({ height = "h-[350px]" }) => {
+  // Sample order data
+  const orders = [
+    {
+      id: 1000,
+      name: "John Doe",
+      date: "2025-01-01",
+      status: "Pending",
+      deadline: "2025-01-05",
+    },
     {
       id: 1001,
       name: "John Doe",
@@ -144,61 +166,52 @@ export default function Ordertable({ height }: OrdertableProps) {
       status: "Shipped",
       deadline: "2025-01-19",
     },
-    
-  ];
+    // ... other orders
+  ] as Order[];
 
   return (
-    <div className={`w-full max-h-[350px] ${height}`}>
-      <table className="w-full flex-1 table-auto border ">
-        <thead className=" bg-[#0E0E25] text-white uppercase text-sm ">
-          <tr>
-            <th className="px-4 py-2 text-center">order id</th>
-            <th className="px-4 py-2 text-center">customer name</th>
-            <th className="px-4 py-2 text-center">order date</th>
-            <th className="px-4 py-2 text-center">status</th>
-            <th className="px-4 py-2 text-center">deadline</th>
-            <th className="px-4 py-2 text-center">actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {data.map((order) => (
-            <tr
+    <div className="p-4 w-full overflow-hidden">
+      <div className={`${height} overflow-y-auto space-y-3`}>
+        {/* Header */}
+        <div className="grid grid-cols-6 gap-4 p-4 rounded-lg bg-gray-50 text-sm font-medium text-gray-600 shadow-md ">
+          <div>Order ID</div>
+          <div>Customer</div>
+          <div>Date</div>
+          <div>Status</div>
+          <div>Deadline</div>
+          <div>Actions</div>
+        </div>
+
+        {/* Orders list */}
+        <div className="space-y-2">
+          {orders.map((order) => (
+            <div
               key={order.id}
-              className="text-black text-sm bg-[#F3FBFF] border-b border-gray-200 hover:bg-gray-100 font-Cormorant font-medium"
+              className="grid grid-cols-6 gap-4 p-4 bg-white rounded-lg shadow-sm hover:shadow-md transition-all duration-200"
             >
-              <td className="px-4 py-2 text-center ">{order.id}</td>
-              <td className="px-4 py-2 text-center">{order.name}</td>
-              <td className="px-4 py-2 text-center">{order.date}</td>
-              <td
-                className={`px-4 py-2 text-center ${
-                  order.status === "Shipped"
-                    ? "bg-green-100 text-green-600"
-                    : order.status === "Delivered"
-                    ? "bg-blue-100 text-blue-600"
-                    : order.status === "Cancelled"
-                    ? "bg-red-100 text-red-600"
-                    : "bg-yellow-100 text-yellow-600"
-                }`}
-              >
-                {order.status}
-              </td>
-              <td className="px-4 py-2 text-center">{order.deadline}</td>
-              <td className="px-4 py-2 text-center">
-                <div className="flex items-center justify-center gap-2">
-                  <button
-                    className="text-white bg-[#0E0E25] border rounded-md py-1 px-2 text-center cursor-pointer"
-                  >
-                    Update
-                  </button>
-                  <button className="text-white bg-[#0E0E25] border rounded-md py-1 px-2 text-center cursor-pointer">
-                    View
-                  </button>
-                </div>
-              </td>
-            </tr>
+              <div className="text-blue-600 font-medium">#{order.id}</div>
+              <div>{order.name}</div>
+              <div>{order.date}</div>
+              <div>
+                <span className={`px-3 py-1 rounded-full text-sm ${statusStyles[order.status]}`}>
+                  {order.status}
+                </span>
+              </div>
+              <div>{order.deadline}</div>
+              <div className="flex gap-2">
+                <button className="px-3 py-1 text-sm bg-slate-900 text-white rounded-md hover:bg-white hover:text-slate-900 transition-colors">
+                  Edit
+                </button>
+                <button className="px-3 py-1 text-sm text-slate-900 bg-gray-50 rounded-md hover:bg-gray-100 transition-colors">
+                  View
+                </button>
+              </div>
+            </div>
           ))}
-        </tbody>
-      </table>
+        </div>
+      </div>
     </div>
   );
-}
+};
+
+export default OrderTable;

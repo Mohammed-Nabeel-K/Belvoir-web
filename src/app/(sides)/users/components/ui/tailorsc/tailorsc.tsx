@@ -97,7 +97,7 @@ const TailorItem: React.FC = () => {
             className="flex-shrink-0 w-[250px] h-[350px] bg-white rounded-lg shadow-md p-2 hover:scale-105 transition-transform"
           >
             <div className="flex justify-center  h-[200px] border rounded-sm">
-              <img src="pend" alt="ing" />
+              {/* <img src="pend" alt="ing" /> */}
             </div>
             <div className="">
               <p>Item Name</p>

@@ -13,17 +13,17 @@ export default function Sidebar({ isOpen }: SidebarProps) {
     >
       <h1 className="text-4xl text-center font-Libre">Belvoir.</h1>
       <div className="flex flex-col items-center gap-2 font-Cormorant">
-        <Link href="/tailoring/dashboard">
+        <Link href="/admin/tailoring/dashboard">
           <p className="hover:bg-white/10 rounded-md w-full px-10 py-1 cursor-pointer">
             Dashboard
           </p>
         </Link>
-        <Link href="/tailoring/earnings">
+        <Link href="/admin/tailoring/earnings">
           <p className="hover:bg-white/10 rounded-md w-full px-10 py-1 cursor-pointer">
             Earnings
           </p>
         </Link>
-        <Link href="/tailoring/orders">
+        <Link href="/admin/tailoring/orders">
           <p className="hover:bg-white/10 rounded-md w-full px-10 py-1 cursor-pointer">
             Orders
           </p>

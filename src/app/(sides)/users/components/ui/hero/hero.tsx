@@ -4,6 +4,16 @@ import Image from "next/image";
 export default function Hero() {
   return (
     <main className="min-h-screen bg-white">
+      {/* <section className="relative h-[70vh] bg-black"> */}
+        {/* <video 
+        className="w-screen h-screen object-contain"
+        autoPlay
+        loop
+        muted
+        >
+        <source src="/home/tailoring.mp4" type="video/mp4" />
+        </video>
+      </section> */}
       {/* Hero Section */}
       <section className="relative h-[70vh] bg-black">
         <Image

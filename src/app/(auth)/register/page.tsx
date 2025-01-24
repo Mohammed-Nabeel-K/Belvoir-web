@@ -68,7 +68,7 @@ const Registration = () => {
         <h1 className="text-white font-serif text-3xl pl-6 pt-4 z-10 relative">
           Belvoir.
         </h1>
-        <div className="absolute left-0 top-0 h-screen w-1/2 overflow-hidden">
+        <div className="absolute left-0 top-0 h-screen  overflow-hidden">
           <Image
             src="/login/bg.jpg"
             alt="Elegant jacket display"

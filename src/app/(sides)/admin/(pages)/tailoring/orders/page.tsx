@@ -7,7 +7,7 @@ export default function Page() {
   const [drop, setDrop] = useState(false);
 
   return (
-    <div className="min-h-screen w-full bg-light flex flex-col p-4 gap-4">
+    <div className="min-h-screen w-full  flex flex-col p-4 gap-4">
       <div className="flex justify-between items-end">
         <h1 className="text-3xl font-Cormorant font-semibold text-dark">
           Orders
@@ -35,7 +35,7 @@ export default function Page() {
                 <button
                   key={status}
                   onClick={() => setDrop(false)}
-                  className="w-full text-center text-sm text-dark bg-blue-100 rounded-lg p-1"
+                  className="w-full text-center text-sm text-dark  rounded-lg p-1"
                 >
                   {status}
                 </button>

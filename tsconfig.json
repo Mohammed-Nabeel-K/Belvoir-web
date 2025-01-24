@@ -22,6 +22,6 @@
       "@/*": ["./src/*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "src/app/(sides)/admin/(super-admin)/sales-report/page.jsx", "src/app/(sides)/admin/(pages)/tailoring/profile/page.jsx"],
   "exclude": ["node_modules"]
 }
