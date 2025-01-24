@@ -16,8 +16,8 @@ const DeliveryBoyListPage = () => {
   const [isAddModalOpen, setAddModalOpen] = useState(false);
   const [newDeleveryBoy, setnewDeleveryBoy] = useState({
     name: "",
-    passwordHash: "",
     email: "",
+    passwordHash: "",
     phone: "",
     licenceNo: "",
     vehicleNo: "",
@@ -294,7 +294,7 @@ const DeliveryBoyListPage = () => {
           </div>
         )}
 
-        {/* Detail Modal */}
+    
         {selected && (
           <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
             <div className="bg-white rounded-xl shadow-sm w-full max-w-lg p-6">

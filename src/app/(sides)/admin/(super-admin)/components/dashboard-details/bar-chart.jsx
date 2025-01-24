@@ -11,27 +11,49 @@ import {
   Tooltip,
   Legend,
 } from "chart.js";
+import { useFetchDetails } from "@/hooks/dashboardHooks";
+
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
 const SalesBarChart = () => {
   
-  const data = {
-    labels: ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
+  const { data, isLoading, isError, error } = useFetchDetails();
+
+  if (isLoading) {
+    return <p>Loading...</p>;
+  }
+
+  if (isError) {
+    return <p>Error: {error.message}</p>;
+  }
+
+  
+  const { salesReports } = data.data;
+
+  
+  const labels = salesReports.map((report) =>
+    new Date(report.date).toLocaleDateString()
+  );
+  const totalSalesData = salesReports.map((report) => report.totalSales);
+  const targetSalesData = salesReports.map((report) => report.targetSales);
+
+  const chartData = {
+    labels,
     datasets: [
       {
         label: "Real Sales",
-        data: [12000, 15000, 13000, 18000, 20000, 17000],
-        backgroundColor: "rgba(102, 178, 255, 0.7)", 
+        data: totalSalesData,
+        backgroundColor: "rgba(102, 178, 255, 0.7)",
         borderColor: "rgba(102, 178, 255, 1)",
         borderWidth: 1,
-        barPercentage: 0.9, 
-        categoryPercentage: 0.5, 
+        barPercentage: 0.9,
+        categoryPercentage: 0.5,
       },
       {
         label: "Target Sales",
-        data: [15000, 17000, 14000, 20000, 22000, 19000],
-        backgroundColor: "rgba(144, 238, 144, 0.7)", 
+        data: targetSalesData,
+        backgroundColor: "rgba(144, 238, 144, 0.7)",
         borderColor: "rgba(144, 238, 144, 1)",
         borderWidth: 1,
         barPercentage: 0.9,
@@ -40,14 +62,13 @@ const SalesBarChart = () => {
     ],
   };
 
-
   const options = {
     responsive: true,
     plugins: {
       legend: {
         position: "top",
         labels: {
-          color: "#4B5563", 
+          color: "#4B5563",
         },
       },
       title: {
@@ -56,13 +77,13 @@ const SalesBarChart = () => {
         font: {
           size: 18,
         },
-        color: "#1F2937", 
+        color: "#1F2937",
       },
     },
     scales: {
       x: {
         ticks: {
-          color: "#6B7280", 
+          color: "#6B7280",
         },
         grid: {
           display: false,
@@ -80,11 +101,9 @@ const SalesBarChart = () => {
   };
 
   return (
-    // <div className="bg-white p-3 rounded-lg shadow-md w-[600px] h-[200px] ml-2">
-      <div>
-        <Bar data={data} options={options} />
-      </div>
-    // </div>
+    <div>
+      <Bar data={chartData} options={options} />
+    </div>
   );
 };
 

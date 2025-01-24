@@ -65,12 +65,7 @@ const Sidebar = () => {
               Delivery Boy List
             </Link>
           </li>
-          <li className="flex items-center gap-3 hover:bg-gray-700 p-3 rounded-lg transition-all">
-            <FaClipboardList size={20} />
-            <Link href="/admin/rental-products" className="flex-1">
-              Rental Products
-            </Link>
-          </li>
+          
          
          
          
@@ -84,6 +79,12 @@ const Sidebar = () => {
             <MdDesignServices size={20} />
             <Link href="/admin/design-list" className="flex-1">
               Design List
+            </Link>
+          </li>
+          <li className="flex items-center gap-3 hover:bg-gray-700 p-3 rounded-lg transition-all">
+            <FaClipboardList size={20} />
+            <Link href="/admin/rental-products" className="flex-1">
+              Rental Products
             </Link>
           </li>
           <li className="flex items-center gap-3 hover:bg-gray-700 p-3 rounded-lg transition-all">
