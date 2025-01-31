@@ -1,5 +1,5 @@
 import {  useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
-import { addClothes, deleteClothes,  fetchAllClothes } from "../api/clothes-api"
+import { addClothes, deleteClothes,  fetchAllClothes, fetchClothesWithoutQuery } from "../api/clothes-api"
 
 
 
@@ -10,6 +10,12 @@ export const useFetchAllClothes=(search,pageNo,pageSize)=>{
     });
 };
 
+export const useFetchClothesWithoutQuery=()=>{
+    return useQuery({
+        queryKey:["clothes"],
+        queryFn:fetchClothesWithoutQuery
+    });
+};
 export const useAddClothes=()=>{
     const queryClient=useQueryClient();
     return useMutation({

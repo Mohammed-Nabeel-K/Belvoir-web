@@ -6,6 +6,12 @@ export const fetchAllClothes =async(search,pageNo,pageSize)=>{
     return response.data
 }
 
+
+export const fetchClothesWithoutQuery=async()=>{
+    const response=await axiosInstance.get("/Clothes/get");
+    return response.data
+}
+
 export const addClothes=async(values)=>{
     const response=await axiosInstance.post("/Clothes/Add",values);
     return response.data

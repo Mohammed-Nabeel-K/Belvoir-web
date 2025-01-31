@@ -15,7 +15,7 @@ const Sidebar = () => {
   };
 
   return (
-    <div className="flex h-full font-sans bg-[#F5F6FA] text-gray-800">
+    <div className="flex h-full  font-sans bg-[#F5F6FA] text-gray-800">
       
       <div
         className={`fixed top-0 left-0 h-full w-64 p-6 bg-[#0E0E25] text-white transform ${

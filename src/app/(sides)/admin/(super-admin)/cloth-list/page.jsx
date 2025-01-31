@@ -15,16 +15,20 @@ const ClothList = () => {
   const [selectedCloth, setSelectedCloth] = useState(null);
   const [isAddModalOpen, setAddModalOpen] = useState(false);
   const [formErrors, setFormErrors] = useState({});
+  
   const [newCloth, setNewCloth] = useState({
-    
-    Title: "",
+    title: "",
     Description: "",
     Price: "",
-    Material: "",
-    DesignPattern: "",
+    MaterialType: "",
+    Color: "",
+    DesignType: "",
     file: null,
-    
   });
+  
+
+  
+
   const [imagePreview, setImagePreview] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
 
@@ -41,8 +45,10 @@ const ClothList = () => {
     const errors = {};
     if (!newCloth.Title) errors.Title = "Title is required.";
     if (!newCloth.Description) errors.Description = "Description is required.";
-    if (!newCloth.Material) errors.Material = "Material is required.";
-    if (!newCloth.DesignPattern) errors.DesignPattern = "Design Pattern is required.";
+    if (!newCloth.MaterialType) errors.MaterialType = "Material Type is required.";
+    if (!newCloth.Color) errors.Color = "Color is required.";
+
+    if (!newCloth.DesignType) errors.DesignType = "Design Type is required.";
     if (!newCloth.Price || isNaN(newCloth.Price)) errors.Price = "Valid price is required.";
     if (!newCloth.file && !isEditing) errors.file = "Image file is required.";
     setFormErrors(errors);
@@ -65,8 +71,10 @@ const ClothList = () => {
     formData.append("Title", newCloth.Title);
     formData.append("Description", newCloth.Description);
     formData.append("Price", newCloth.Price);
-    formData.append("Material", newCloth.Material);
-    formData.append("DesignPattern", newCloth.DesignPattern);
+    formData.append("Material", newCloth.MaterialType);
+    formData.append("DesignPattern", newCloth.DesignType);
+    formData.append("color", newCloth.Color);
+
     if (newCloth.file) formData.append("file", newCloth.file);
 
 
@@ -81,7 +89,8 @@ const ClothList = () => {
               Title: "",
               Description: "",
               Price: "",
-              Material: "",
+              MaterialType: "",
+              Color:"",
               DesignPattern: "",
               file: null,
             });
@@ -101,11 +110,13 @@ const ClothList = () => {
           setAddModalOpen(false);
           setNewCloth({
             
+            
             Title: "",
             Description: "",
             Price: "",
-            Material: "",
-            DesignPattern: "",
+            MaterialType: "",
+            Color:"",
+            DesignType: "",
             file: null,
           });
           setImagePreview(null);
@@ -118,19 +129,23 @@ const ClothList = () => {
       });
     }
   };
-
   const handleAddInputChange = (e) => {
     const { name, value } = e.target;
-    setNewCloth((prev) => ({ ...prev, [name]: value }));
+    setNewCloth((prev) => ({
+      ...prev,
+      [name]: value || "",
+    }));
   };
+  
 
   const handleEditClick = (cloth) => {
     setNewCloth({
       file: null,
       Title: cloth.title,
       Description: cloth.description,
-      Material: cloth.material,
-      DesignPattern: cloth.designPattern,
+      MaterialType: cloth.MaterialType,
+      Color:cloth.Color,
+      DesignType: cloth.designType,
       Price: cloth.price,
     });
     setImagePreview(cloth.imageUrl);
@@ -165,8 +180,9 @@ const ClothList = () => {
                 file: null,
                 Title: "",
                 Description: "",
-                Material: "",
-                DesignPattern: "",
+                MaterialType: "",
+                Color:"",
+                DesignType: "",
                 Price: "",
               });
               setImagePreview(null);
@@ -211,7 +227,7 @@ const ClothList = () => {
                   </td>
                  
                   <td className="px-6 py-3">{cloth.price}</td>
-                  <td className="px-6 py-3">{cloth.material}</td>
+                  <td className="px-6 py-3">{cloth.materialType}</td>
                   <td className="px-6 py-3 text-center">
                     <button
                       onClick={(e) => {
@@ -259,7 +275,7 @@ const ClothList = () => {
               <form onSubmit={handleAddClothSubmit}>
                 <div className="space-y-4">
                   
-                  {["Title", "Description", "Price","Material", "DesignPattern" ].map(
+                  {["Title", "Description", "Price","Material type", "Design type","color" ].map(
                     (field) => (
                       <div key={field}>
                         <label className="block text-gray-700 font-medium capitalize">
@@ -332,7 +348,7 @@ const ClothList = () => {
                 </h2>
                 <div className="space-y-2">
                   <p>
-                    <strong>ID:</strong> {selectedCloth.Id}
+                    <strong>ID:</strong> {selectedCloth.id}
                   </p>
                   <p>
                     <strong>Name:</strong> {selectedCloth.title}
@@ -341,10 +357,10 @@ const ClothList = () => {
                     <strong>Description:</strong> {selectedCloth.description}
                   </p>
                   <p>
-                    <strong>Material:</strong> {selectedCloth.material}
+                    <strong>Material:</strong> {selectedCloth.materialType}
                   </p>
                   <p>
-                    <strong>Design pattern:</strong> {selectedCloth.designPattern}
+                    <strong>Design :</strong> {selectedCloth.designType}
                   </p>
                   <p>
                     <strong>Price:</strong> {selectedCloth.price}

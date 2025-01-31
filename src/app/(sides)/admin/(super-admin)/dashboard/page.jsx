@@ -5,7 +5,7 @@ import TopProductsTable from '../components/dashboard-details/Top-products'
 
 const page = () => {
   return (
-    <div >
+    <div  >
         <div>
         <OverView/>
         </div>

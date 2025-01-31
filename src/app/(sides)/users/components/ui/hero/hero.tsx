@@ -1,4 +1,6 @@
 import Image from "next/image";
+import Link from "next/link";
+
 
 // Main landing page component
 export default function Hero() {
@@ -49,9 +51,11 @@ export default function Hero() {
               style and specifications. Expert craftsmanship to create a
               flawless fit. Each stitch tells a passion for excellence.
             </p>
+            <Link href={"/users/clothes"}>
             <button className="bg-[#1a1b3f] hover:bg-[#2a2b4f] text-white text-sm p-2 rounded-sm">
               BOOK NOW
             </button>
+            </Link>
           </div>
           <div className="relative h-[300px]">
             <Image
