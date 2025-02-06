@@ -7,17 +7,14 @@ import Image from 'next/image';
 import { Eye, EyeOff } from 'lucide-react';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
-import axiosInstance from '../../../../api/axiosinstance/axiosInstance';
+import axiosInstance from '../../../../axios/axiosinstance/axiosInstance';
 import Link from 'next/link';
 
 
 
 
-
-
-
-
-
+ 
+  
 const Registration = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [status, setStatus] = useState('idle');

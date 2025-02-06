@@ -1,13 +1,9 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
-import axiosInstance from "../../../../../../../api/axiosinstance/axiosInstance";
+import axiosInstance from "../../../../../../../axios/axiosinstance/axiosInstance";
 import Image from "next/image";
 import Profileui from '../../../(super-admin)/components/shimmerui/profileui'
-
-
-
-
 
 
 
@@ -15,9 +11,9 @@ import Profileui from '../../../(super-admin)/components/shimmerui/profileui'
 const ProfilePage = () => {
   const [status,setStatus] = useState('idle');
   const [showModal, setShowModal] = useState(false);
-  const [tailordata, setTailorData] = useState({});
+  const [deliverydata, setDeliveryData] = useState({});
 
-const fetchTailorProfile = async () => {
+const fetchDeliveryProfile = async () => {
 
   setStatus('loading');
 
@@ -30,14 +26,14 @@ const fetchTailorProfile = async () => {
 
 console.log(token)
 
-    const response = await axiosInstance.get("/Tailor/tailorprofile", {
+    const response = await axiosInstance.get("/Delivery/profile-delivery ", {
       headers: {
         Authorization: `Bearer ${token}`,
       },
     });
 
 
-    setTailorData(response.data.data);
+    setDeliveryData(response.data.data);
 
     
   } catch (error) {
@@ -50,20 +46,20 @@ console.log(token)
 
 };
 
-console.log(tailordata);
+console.log(deliverydata);
 
   useEffect(() => {
-    fetchTailorProfile();
+    fetchDeliveryProfile();
   }, []);
 
   return (
-    // Full-width container with responsive padding
+  
     <div className="w-full p-4 sm:p-6 lg:p-8 bg-gray-50">
-      {/* Content wrapper with max-width for larger screens */}
+
       <div className="max-w-5xl mx-auto space-y-4">
-        {/* Profile card */}
+
         <div className="relative p-4 sm:p-6 bg-white rounded-lg shadow-sm">
-          {/* Badge - responsive positioning */}
+
           <div className="absolute right-4 top-4 px-3 py-1 text-sm bg-green-100 text-green-800 rounded">
             Delivery
           </div>
@@ -86,14 +82,14 @@ console.log(tailordata);
               <div className="flex flex-col space-y-4 text-center sm:text-left">
                 <div className="space-y-1">
                   <h1 className="text-2xl sm:text-3xl font-semibold">
-                    {tailordata.name}
+                    {deliverydata.name}
                   </h1>
                   <p className="text-gray-600"></p>
                 </div>
                 <div className="space-y-2">
-                  <p className="text-gray-700">{tailordata.email}</p>
-                  <p className="text-gray-700">{tailordata.phone}</p>
-                  <p className="text-gray-700">{tailordata.experience}</p>
+                  <p className="text-gray-700">{deliverydata.email}</p>
+                  <p className="text-gray-700">{deliverydata.phone}</p>
+                  <p className="text-gray-700">{deliverydata.experience}</p>
                 </div>
               </div>
 

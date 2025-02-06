@@ -22,6 +22,6 @@
       "@/*": ["./src/*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "src/app/(sides)/admin/(super-admin)/sales-report/page.jsx", "src/app/(sides)/admin/(pages)/tailoring/profile/page.jsx"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "src/app/(sides)/admin/(super-admin)/sales-report/page.jsx", "src/app/(sides)/admin/(pages)/tailoring/profile/page.jsx", "src/app/(sides)/users/(pages)/Rentals/[id]/page.jsx", "src/app/(sides)/users/(pages)/Rentals/page.jsx", "src/app/(sides)/users/components/Rentals/RatingCard.jsx", "src/app/(sides)/users/components/Rentals/SimilarProducts.jsx"],
   "exclude": ["node_modules"]
 }

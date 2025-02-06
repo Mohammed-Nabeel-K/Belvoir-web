@@ -1,4 +1,4 @@
-import axiosInstance from "../../api/axiosinstance/axiosInstance";
+import axiosInstance from "../../axios/axiosinstance/axiosInstance";
 
 export const fetchTailors = async (pagesize, pagenum, search, status) => {
   const response = await axiosInstance.get(

@@ -1,4 +1,4 @@
-import axiosInstance from "../../api/axiosinstance/axiosInstance"
+import axiosInstance from "../../axios/axiosinstance/axiosInstance"
 
 export const fetchAllLaundryShops=async(pagesize,pagenum,search,status)=>{
     const response=await axiosInstance.get(`/Admin/users/laundry?SearchTerm=${search}&IsBlocked=${status}&PageSize=${pagesize}&pageNo=${pagenum}`);

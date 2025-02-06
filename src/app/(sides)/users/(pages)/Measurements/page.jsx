@@ -1,6 +1,7 @@
 "use client";
 import Link from "next/link";
 import React, { useState } from "react";
+import CommonNavbar from "../../components/navbar-common/CommonNavbar";
 
 
 const TailoringMeasurement = () => {
@@ -26,6 +27,8 @@ const TailoringMeasurement = () => {
   };
 
   return (
+    <>
+    <CommonNavbar/>
     <div className="flex flex-col lg:flex-row items-center justify-center gap-12 p-10 font-sans">
       <Link href={"/users/Design"}>
       <button
@@ -136,6 +139,7 @@ const TailoringMeasurement = () => {
         </form>
       </div>
     </div>
+    </>
   );
 };
 

@@ -1,7 +1,7 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
-import axiosInstance from "../../../../../../../api/axiosinstance/axiosInstance";
+import axiosInstance from "../../../../../../../axios/axiosinstance/axiosInstance";
 import Image from "next/image";
 import Profileui from '../../../(super-admin)/components/shimmerui/profileui'
 

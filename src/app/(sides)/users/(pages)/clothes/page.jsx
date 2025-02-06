@@ -45,7 +45,7 @@ import React from "react";
 import Container from "../../components/clothes/Container";
 import Image from "next/image";
 import Footer from "../../components/ui/footer/Footer";
-import NavbarCloth from "../../components/clothes/NavbarClothpage";
+import CommonNavbar from "../../components/navbar-common/CommonNavbar";
 
 function Page() {
   const caption = "Elevate Your Style with Every Piece.";
@@ -53,11 +53,10 @@ function Page() {
   return (
     <main className="min-h-screen bg-white">
       <div>
-        <NavbarCloth/>
+        <CommonNavbar/>
       </div>
 
 
-      
       <div className="w-full h-[500px] relative mt-3">
         <Image
           src="/clothes/cloths.jpg"
@@ -65,7 +64,7 @@ function Page() {
           layout="fill"
           objectFit="cover"
         />
-        <div className="absolute top-0 left-0 w-full h-full bg-black opacity-50"></div>
+        <div className="absolute top-0 left-0 w-full h-full bg-black opacity-60"></div>
         <div className="absolute top-1/4 left-1/2 transform -translate-x-1/2 text-center text-white">
           <div className="text-6xl font-serif uppercase font-bold text-gold mt-5">Belvoir</div>
           <p className="mt-4 text-xl font-sans italic">{caption}</p>

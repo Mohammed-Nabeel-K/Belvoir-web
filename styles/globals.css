@@ -12,4 +12,6 @@
 body {
   font-family: Arial, sans-serif;
 }
-
+.swiper-pagination-bullet-active {
+  background-color: black;
+}

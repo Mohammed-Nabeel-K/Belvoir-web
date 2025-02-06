@@ -60,10 +60,11 @@
 // }
 
 import { notFound } from "next/navigation";
-import axiosInstance from "../../../../../../../api/axiosinstance/axiosInstance";
+import axiosInstance from "../../../../../../../axios/axiosinstance/axiosInstance";
 import SimilarProducts from "../../../components/clothes/SimilarProducts";
 import Footer from "../../../components/ui/footer/Footer";
 import Link from "next/link";
+import CommonNavbar from "../../../components/navbar-common/CommonNavbar";
 
 export default async function ClothDetail({ params }) {
   const { id } = params;
@@ -86,6 +87,10 @@ export default async function ClothDetail({ params }) {
 
   return (
     <>
+    <div>
+      <CommonNavbar/>
+    </div>
+
     <div className="container mx-auto mt-8 p-4">
       <div className="flex flex-col md:flex-row">
         {/* Image on the left side */}

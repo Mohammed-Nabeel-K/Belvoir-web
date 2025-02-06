@@ -1,13 +1,12 @@
 import Image from "next/image";
 import Link from "next/link";
 
-
 // Main landing page component
 export default function Hero() {
   return (
     <main className="min-h-screen bg-white">
       {/* <section className="relative h-[70vh] bg-black"> */}
-        {/* <video 
+      {/* <video 
         className="w-screen h-screen object-contain"
         autoPlay
         loop
@@ -52,9 +51,9 @@ export default function Hero() {
               flawless fit. Each stitch tells a passion for excellence.
             </p>
             <Link href={"/users/clothes"}>
-            <button className="bg-[#1a1b3f] hover:bg-[#2a2b4f] text-white text-sm p-2 rounded-sm">
-              BOOK NOW
-            </button>
+              <button className="bg-[#1a1b3f] hover:bg-[#2a2b4f] text-white text-sm p-2 rounded-sm">
+                BOOK NOW
+              </button>
             </Link>
           </div>
           <div className="relative h-[300px]">
@@ -68,7 +67,7 @@ export default function Hero() {
         </div>
 
         {/* Premium Laundry */}
-        <div className="grid md:grid-cols-2 gap-8 items-center">
+        {/* <div className="grid md:grid-cols-2 gap-8 items-center">
           <div className="space-y-4 md:order-2">
             <h2 className="text-2xl font-light">Premium Laundry Services</h2>
             <p className="text-gray-600">
@@ -88,10 +87,19 @@ export default function Hero() {
               className="object-cover rounded-lg"
             />
           </div>
-        </div>
+        </div> */}
 
         {/* Clothing Rentals */}
         <div className="grid md:grid-cols-2 gap-8 items-center">
+          
+          <div className="relative h-[300px]">
+            <Image
+              src="/home/3.jpg"
+              alt="Clothing rental"
+              fill
+              className="object-cover rounded-lg"
+            />
+          </div>
           <div className="space-y-4">
             <h2 className="text-2xl font-light">
               Clothing Rentals for Every Occasion
@@ -102,17 +110,11 @@ export default function Hero() {
               Affordable Styling: Get the style you want at a fraction of the
               cost.
             </p>
-            <button className="bg-[#1a1b3f] hover:bg-[#2a2b4f] text-white text-sm p-2 rounded-sm">
-              BOOK NOW
-            </button>
-          </div>
-          <div className="relative h-[300px]">
-            <Image
-              src="/home/3.jpg"
-              alt="Clothing rental"
-              fill
-              className="object-cover rounded-lg"
-            />
+            <Link href={"/users/Rentals"}>
+              <button className="bg-[#1a1b3f] hover:bg-[#2a2b4f] text-white text-sm p-2 rounded-sm">
+                BOOK NOW
+              </button>
+            </Link>
           </div>
         </div>
       </section>
@@ -138,7 +140,6 @@ export default function Hero() {
                   />
                 </div>
 
-                
                 <div className="text-center">
                   <button className="w-full bg-[#1a1b3f] hover:bg-[#2a2b4f] text-white text-sm py-2 rounded-sm">
                     Book now

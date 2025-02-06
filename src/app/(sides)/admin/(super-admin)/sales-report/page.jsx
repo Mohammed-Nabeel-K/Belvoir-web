@@ -1,7 +1,7 @@
 "use client"
 
 import React, { useEffect, useState } from 'react';
-import axiosInstance from '../../../../../../api/axiosinstance/axiosInstance';
+import axiosInstance from '../../../../../../axios/axiosinstance/axiosInstance';
 import TableLoading from '../components/shimmerui/tableloading'
 
 const SalesTable = () => {

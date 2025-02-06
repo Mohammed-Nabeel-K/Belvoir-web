@@ -1,21 +1,54 @@
 import {  useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
-import { addClothes, deleteClothes,  fetchAllClothes, fetchClothesWithoutQuery } from "../api/clothes-api"
+import { addClothes, deleteClothes,  fetchAllClothes } from "../api/clothes-api"
 
 
 
-export const useFetchAllClothes=(search,pageNo,pageSize)=>{
-    return useQuery({
-        queryKey:["clothes"],
-        queryFn:()=>fetchAllClothes(search,pageNo,pageSize)
-    });
+
+export const useFetchAllClothes = (
+  search ,
+  sortBy ,
+  isDescending ,
+  Material ,
+  DesignPattern,
+  minPrice = 0,
+  maxPrice = 10000,
+  pageNo = 1,
+  pageSize = 10
+) => {
+  return useQuery({
+    queryKey: ["clothes", search, sortBy, isDescending, Material,DesignPattern, minPrice, maxPrice, pageNo, pageSize],
+    queryFn: () =>
+      fetchAllClothes({
+        search,
+        sortBy,
+        isDescending,
+        Material,
+        DesignPattern,
+        minPrice,
+        maxPrice,
+        pageNo,
+        pageSize
+      }),
+    keepPreviousData: true, // Helps with pagination performance
+    staleTime: 300000, // 5 minutes to avoid unnecessary refetching
+  });
 };
 
-export const useFetchClothesWithoutQuery=()=>{
-    return useQuery({
-        queryKey:["clothes"],
-        queryFn:fetchClothesWithoutQuery
-    });
-};
+
+// export const useFetchAllClothes=(search,pageNo,pageSize)=>{
+//     return useQuery({
+//         queryKey:["clothes"],
+//         queryFn:()=>fetchAllClothes(search,pageNo,pageSize)
+//     });
+// };
+
+// export const useFetchClothesWithoutQuery=()=>{
+//     return useQuery({
+//         queryKey:["clothes"],
+//         queryFn:fetchClothesWithoutQuery
+//     });
+// };
+
 export const useAddClothes=()=>{
     const queryClient=useQueryClient();
     return useMutation({

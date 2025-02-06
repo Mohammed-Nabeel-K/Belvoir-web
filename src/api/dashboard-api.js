@@ -1,5 +1,5 @@
 
-import axiosInstance from "../../api/axiosinstance/axiosInstance"
+import axiosInstance from "../../axios/axiosinstance/axiosInstance"
 
 
 export const fetchDetails=async()=>{

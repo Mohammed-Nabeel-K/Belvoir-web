@@ -55,9 +55,15 @@ const Navbar = () => {
                     Home
                   </div>
                 </Link>
+    
+                <Link href="/users/Rentals">
+                  <div className="px-3 py-2 text-gray-900 hover:text-gray-600 text-sm font-medium transition-colors duration-200">
+                    Rentals
+                  </div>
+                </Link>
                 <Link href="#">
                   <div className="px-3 py-2 text-gray-900 hover:text-gray-600 text-sm font-medium transition-colors duration-200">
-                    Services
+                    Tailoring
                   </div>
                 </Link>
                 <Link href="#">

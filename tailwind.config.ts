@@ -20,6 +20,9 @@ export default {
         Libre: ['Libre Caslon Display'],
         Cormorant : ['Cormorant SC'],
       },
+      boxShadow: {
+        'custom': '0px 3px 8px rgba(0, 0, 0, 0.24)',
+      },
     },
   },
   plugins: [require('tailwind-scrollbar-hide')],

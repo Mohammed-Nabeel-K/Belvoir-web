@@ -9,3 +9,5 @@ export const useFetchDetails=()=>{
         queryFn:fetchDetails
     })
 }
+
+

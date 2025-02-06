@@ -173,11 +173,11 @@
 // export default SimilarProducts;
 "use client";
 import React from "react";
-import { useFetchClothesWithoutQuery } from "../../../../../hooks/clothesHook";
+import { useFetchAllClothes } from "../../../../../hooks/clothesHook";
 import Link from "next/link";
 
 const SimilarProducts = ({ materialType, id }) => {
-  const { data } = useFetchClothesWithoutQuery();
+  const { data } = useFetchAllClothes();
 
   const similarCloths = data?.data.filter(
     (item) => item.materialType === materialType && item.id !== id

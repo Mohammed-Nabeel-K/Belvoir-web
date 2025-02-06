@@ -1,4 +1,4 @@
-import axiosInstance from "../../api/axiosinstance/axiosInstance";
+import axiosInstance from "../../axios/axiosinstance/axiosInstance";
 
 export const fetchDeleveryBoy = async (pageNo,pagesize,search) => {
   const response = await axiosInstance.get(`/Admin/users/delivery?SearchTerm=${search}&PageSize=${pagesize}&pageNo=${pageNo}`);
