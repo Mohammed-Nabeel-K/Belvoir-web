@@ -2,7 +2,6 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
-import {UsefetchAllRentalProducts} from "../../../../../hooks/rentalProductsHoook"  
 
 const RentalCards = ({data,isLoading,error}) => {
   
@@ -15,17 +14,17 @@ const RentalCards = ({data,isLoading,error}) => {
   }
   return (  
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6  px-3">
-      {data.data ? (
-        data.data.map((item) => (
+      {data ? (
+        data.map((item,i) => (
           <div
-            key={item.id}
+            key={i}
             className="p-4 bg-gray-100  flex flex-col rounded-lg mx-1 h-max shadow-custom"
           >
             {/* Image and Title */}
             <div className="overflow-hidden flex justify-center">
               <img
                 className="object-cover duration-150 transition-all hover:scale-110 h-[180px] w-[250px] rounded-lg"
-                src={item.images.find(image => image.isPrimary)?.imagePath}
+                src={item?.images.find(image => image.isPrimary)?.imagePath}
                 />
             </div>
 

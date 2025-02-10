@@ -1,5 +1,5 @@
 import {Heart,Box,Zap} from 'lucide-react'
-
+import Link from 'next/link';
 
 
 // components/UserProfile.jsx
@@ -53,12 +53,12 @@ export default function UserProfile() {
               <h3 className="text-lg font-semibold text-gray-800 mb-2 flex justify-center items-centery"><Box strokeWidth={1} />&nbsp;&nbsp; My Orders</h3>
               <p className="text-gray-600 text-sm">Track your ongoing services</p>
             </button>
-  
             <button className="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow">
+          <Link href="/users/wishlist">
               <h3 className="text-lg font-semibold text-gray-800 mb-2 flex justify-center items-centery"><Heart strokeWidth={1} />&nbsp;&nbsp; Wishlist</h3>
               <p className="text-gray-600 text-sm">Saved items for later</p>
+          </Link>
             </button>
-  
             <button className="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow">
               <h3 className="text-lg font-semibold text-gray-800 mb-2 flex justify-center items-centery"><Zap strokeWidth={1} />&nbsp;&nbsp; Quick Order</h3>
               <p className="text-gray-600 text-sm">Start new service request</p>

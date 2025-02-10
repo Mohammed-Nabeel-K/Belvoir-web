@@ -1,15 +1,10 @@
 "use client"
-import React from "react";
+import React, { useEffect } from "react";
 import Image from "next/image"; // Import Next.js Image component
 import im from "../../../../../../public/Rentals/freepik__upload__70594.png"
-const OrderSummary = ({handleBack}) => {
+const OrderSummary = ({selectedAddress,setSelectedAddress,handleBack}) => {
   // Hardcoded address
-  const selectedAddress = {
-    name: "Muhammed Saheen",
-    address: "123, MG Road, Calicut, Kerala",
-    phone: "+91 9876543210",
-  };
-
+  
   // Hardcoded cart items
   const cartItems = [
     { id: 1, name: "Wireless Earbuds", price: 1500, quantity: 2 },
@@ -23,7 +18,12 @@ const OrderSummary = ({handleBack}) => {
   const handlePlaceOrder = () => {
     alert("Order placed successfully!");
   };
-
+  useEffect(() => {
+    const storedAddress = localStorage.getItem("selectedAddress");
+    if (storedAddress) {
+      setSelectedAddress(JSON.parse(storedAddress));
+    }  }, [])
+  
   return (
     <div className="p-4 max-w-xl mx-auto border rounded-md shadow-lg bg-white">
       <h2 className="text-xl font-bold mb-4">Order Summary</h2>
@@ -32,9 +32,9 @@ const OrderSummary = ({handleBack}) => {
       {selectedAddress ? (
         <div className="p-3 border rounded-md bg-gray-100 mb-4">
           <h3 className="text-lg font-semibold">Deliver To:</h3>
-          <p className="text-gray-700">{selectedAddress.name}</p>
-          <p className="text-gray-600">{selectedAddress.address}</p>
-          <p className="text-gray-600">📞 {selectedAddress.phone}</p>
+          <p className="text-gray-700">{selectedAddress.contactName}</p>
+          <p className="text-gray-600">{selectedAddress.street}</p>
+          <p className="text-gray-600">📞 {selectedAddress.contactNumber}</p>
         </div>
       ) : (
         <p className="text-red-500 mb-4">No address selected!</p>

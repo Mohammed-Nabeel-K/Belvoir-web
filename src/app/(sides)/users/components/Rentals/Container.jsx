@@ -1,52 +1,99 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import Filter from "./Filter";
 import RentalCards from "./RentalCards";
-import { Menu, X, MoreVertical } from "lucide-react";
+import { MoreVertical, X } from "lucide-react";
+import axiosInstance from "../../../../../../axios/axiosinstance/axiosInstance";
 import { UsefetchAllRentalProducts } from "@/hooks/rentalProductsHoook";
 
 function Container() {
-  const [menuOpen, setMenuOpen] = useState(false);
   const [filterOpen, setFilterOpen] = useState(false);
-  const [sortType, setSortType] = useState(""); 
   const [searchdata, setsearchdata] = useState("");
-  const [minPrice, setMinPrice] = useState(); 
-  const [maxPrice, setMaxPrice] = useState();
-  const handleSort = (type) => {
-    setSortType(type);
-    setMenuOpen(false); 
-  };
-
+  const [minPrice, setMinPrice] = useState("");
+  const [maxPrice, setMaxPrice] = useState("");
+  const [pagenumber, setpagenumber] = useState(1);
   const [filterdata, setfilterdata] = useState({
     gender: "",
     garmenttype: "",
     fabrictype: "",
   });
+  const [Data, setData] = useState();
+  const [hasMore, setHasMore] = useState(true);
+  const pageSize = 1;
 
-  const { data, isLoading, error } = UsefetchAllRentalProducts(1, 10,filterdata.gender,filterdata.garmenttype,filterdata.fabrictype,searchdata,minPrice,maxPrice);
+  const { data, isLoading } = UsefetchAllRentalProducts(
+    pagenumber,
+    pageSize,
+    filterdata.gender,
+    filterdata.fabrictype,
+    filterdata.garmenttype,
+    searchdata,
+    minPrice,
+    maxPrice
+  );
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      document.body.style.overflow = filterOpen ? "hidden" : "scroll";
+    }
+  }, [filterOpen]);  
+  useEffect(() => {
+   
+    setpagenumber(1);
+    setHasMore(true);
+  }, [filterdata, searchdata, minPrice, maxPrice]);
+
+  useEffect(() => {
+    if (data?.data) {
+      if (pagenumber === 1) {
+        setData(data.data);
+      } else {
+        setData((prev) => [...prev, ...data.data]);
+        console.log(pagenumber);
+        console.log(Data);
+      }
+      if (data.data.length < pageSize) {
+        setHasMore(false);
+      }
+    }
+  }, [data, pagenumber, pageSize]);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const { scrollTop, clientHeight, scrollHeight } =
+        document.documentElement;
+      if (
+        scrollTop + clientHeight >= scrollHeight - 10 &&
+        !isLoading &&
+        hasMore
+      ) {
+        setpagenumber((prev) => prev + 1);
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [isLoading, hasMore]);
 
   return (
     <main>
       <div className="mx-auto my-4 px-2">
-        <div className="flex  flex-wrap items-center justify-end bg-white p-4 rounded-lg gap-4">
-        
-          <div className="flex  items-center flex-grow sm:flex-none space-x-2">
-         
+        <div className="flex flex-wrap items-center justify-end bg-white p-4 rounded-lg gap-4">
+          <div className="flex items-center flex-grow sm:flex-none space-x-2">
             <button
               onClick={() => setFilterOpen(true)}
-              className="md:hidden flex items-center justify-center bg-gray-200 p-2 rounded-full hover:bg-gray-300"
+              className="md:hidden lg:hidden flex items-center justify-center bg-gray-200 p-2 rounded-full hover:bg-gray-300"
             >
               <MoreVertical size={24} />
             </button>
 
             {/* Search Bar */}
-            <div className="flex flex-grow sm:flex-none  rounded-3xl border-2 border-gray-500 overflow-hidden w-full max-w-[280px] sm:max-w-md">
+            <div className="flex flex-grow sm:flex-none rounded-3xl border-2 border-gray-500 overflow-hidden w-full max-w-[280px] sm:max-w-md">
               <input
                 type="text"
-                value={searchdata}
+                value={searchdata || ""}
                 placeholder="Search Something..."
                 className="w-full outline-none bg-white text-gray-600 text-sm px-3 py-2"
-                onChange={(e)=>setsearchdata(e.target.value)}
+                onChange={(e) => setsearchdata(e.target.value)}
               />
               <button className="flex items-center justify-center bg-black px-3">
                 <svg
@@ -60,59 +107,42 @@ function Container() {
               </button>
             </div>
           </div>
-
-          <div className="relative">
-          
-
-            <button
-              onClick={() => setMenuOpen(!menuOpen)}
-              className="md:hidden flex items-center justify-center bg-gray-200 p-2 rounded-full hover:bg-gray-300"
-            >
-              {menuOpen ? <X size={24} /> : <Menu size={24} />}
-            </button>
-
-            {menuOpen && (
-              <div className="absolute right-0 mt-2 w-48 bg-white border rounded-lg shadow-lg p-2 z-50">
-                <button
-                  onClick={() => handleSort("asc")}
-                  className="block w-full text-left px-4 py-2 rounded hover:bg-gray-200"
-                >
-                  Price Ascending
-                </button>
-                <button
-                  onClick={() => handleSort("desc")}
-                  className="block w-full text-left px-4 py-2 rounded hover:bg-gray-200"
-                >
-                  Price Descending
-                </button>
-                <button
-                  onClick={() => handleSort("rating")}
-                  className="block w-full text-left px-4 py-2 rounded hover:bg-gray-200"
-                >
-                  Rating
-                </button>
-              </div>
-            )}
-          </div>
         </div>
       </div>
 
       <div className="flex">
         <div className="hidden md:block">
-          <Filter setfilterdata={setfilterdata} filterdata={filterdata} setMinPrice={setMinPrice} setMaxPrice={setMaxPrice} />
+          <Filter
+            setfilterdata={setfilterdata}
+            filterdata={filterdata}
+            setMinPrice={setMinPrice}
+            setMaxPrice={setMaxPrice}
+            minprice={minPrice}
+            maxprice={maxPrice}
+          />
         </div>
         {filterOpen && (
-          <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex justify-end">
-            <div className="w-3/4 sm:w-1/2 bg-white h-full p-4  transform translate-x-0 transition-transform">
-              <button onClick={() => setFilterOpen(false)} className="absolute top-4 right-4">
-                <X size={24} />
+          <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex justify-end h-[100vh]  ">
+            <div className="w-3/4 sm:w-1/2 bg-white h-full p-4 transform translate-x-0 transition-transform overflow-y-scroll">
+              <button
+                onClick={() => setFilterOpen(false)}
+                className="absolute top-4 right-4 cursor-pointer"
+              >
+                <X size={24} className="cursor-pointer"/>
               </button>
-              <Filter />
+              <Filter
+                isLoading={isLoading}
+                setfilterdata={setfilterdata}
+                filterdata={filterdata}
+                setMinPrice={setMinPrice}
+                setMaxPrice={setMaxPrice}
+                minprice={minPrice}
+                maxprice={maxPrice}
+              />
             </div>
           </div>
         )}
-
-        <RentalCards data={data} isLoading={isLoading} error={error}/>
+        <RentalCards data={Data} isLoading={isLoading} />
       </div>
     </main>
   );

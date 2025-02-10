@@ -12,48 +12,37 @@ function Container() {
   const [sort, setSort] = useState(false);
   const [Material, setMaterial] = useState("");
   const [designPattern, setDesignPattern] = useState("");
-  const [pageNo, setPageNo] = useState(1); // Track current page
-  const [hasMore, setHasMore] = useState(true); // Track if more data is available
-  const pageSize = 10; // Number of items per page
+  const [pageNo, setPageNo] = useState(1); 
+  const [hasMore, setHasMore] = useState(true);
+  const pageSize = 10; 
 
   const { data, isLoading } = useFetchAllClothes(query, "price", sort, Material, designPattern,"" ,"",pageNo, pageSize);
   const [filteredData, setFilteredData] = useState([]);
   console.log(data)
 
-  // Update filteredData when new data is fetched
   useEffect(() => {
     if (data?.data) {
-      // If it's the first page, replace the data
       console.log(data.data)
       if (pageNo === 1) {
         setFilteredData(data.data);
       } else {
-        // Otherwise, append the new data
         setFilteredData((prev) => [...prev, ...data.data]);
       }
-
-      // Check if there's more data to load
       if (data.data.length < pageSize) {
-        setHasMore(false); // No more data to load
+        setHasMore(false); 
       }
     }
   }, [data, pageNo, pageSize]);
 
-  // Handle scroll event to load more data
   useEffect(() => {
     const handleScroll = () => {
       const { scrollTop, clientHeight, scrollHeight } = document.documentElement;
-
-      // Check if the user has scrolled to the bottom
       if (scrollTop + clientHeight >= scrollHeight - 10 && !isLoading && hasMore) {
-        setPageNo((prev) => prev + 1); // Load the next page
+        setPageNo((prev) => prev + 1); 
       }
     };
 
-    // Attach the scroll event listener
     window.addEventListener("scroll", handleScroll);
-
-    // Cleanup the event listener on unmount
     return () => window.removeEventListener("scroll", handleScroll);
   }, [isLoading, hasMore]);
 

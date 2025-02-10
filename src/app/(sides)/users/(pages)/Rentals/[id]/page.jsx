@@ -5,55 +5,77 @@ import SimilarProducts from "../../../components/Rentals/SimilarProducts";
 import Footer from "../../../components/ui/footer/Footer";
 import Link from "next/link";
 import RatingCard from "../../../components/Rentals/RatingCard";
-import { useEffect, useState } from "react";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faHeart } from '@fortawesome/free-solid-svg-icons';
-import Loadercustom from "../../../components/ui/Loader"
+import { useContext, useEffect, useState } from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faHeart } from "@fortawesome/free-solid-svg-icons";
+import Loadercustom from "../../../components/ui/Loader";
 import Image from "next/image";
 import Navbar from "../../../components/ui/navbar/Navbar";
+import LoaderCustom from "../../../components/ui/Loader";
+import { OrderContext } from "@/app/Provider/OrderProvider";
+import { useRouter } from "next/navigation";
 export default function RentalDetail() {
+  const router = useRouter();
   const params = useParams();
-  const id = params?.id ;
+  const id = params?.id;
   const [cloth, setCloth] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [activeimage, setactiveimage] = useState(null);
-  const [similiarproducts, setsimiliarproducts] = useState(null)
+  const [similiarproducts, setsimiliarproducts] = useState(null);
   const [clicked, setclicked] = useState(false);
   const [rating, setrating] = useState();
+  const [handlmore, sethandlmore] = useState(true);
   const [filterdata, setfilterdata] = useState({
     gender: "",
     garmenttype: "",
     fabrictype: "",
   });
+  const [ratingloading, setratingloading] = useState(false);
 
+  const { order, setOrder } = useContext(OrderContext);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axiosInstance.get(`/Rentals/id`, {
+        const response = await axiosInstance.get(`/Rental/id`, {
           params: { id },
         });
         setCloth(response.data.data);
-        var defaultimg = response.data.data.images.find((x) => x.isPrimary)?.imagePath;
+        var defaultimg = response.data.data.images.find(
+          (x) => x.isPrimary
+        )?.imagePath;
         setactiveimage(defaultimg);
-        const similiarProductresponse =await axiosInstance.get(`/Rentals/category`,{
-          params:{
-            gender:response.data.data.gender,
-            garmentType:response.data.data.garmenttype,
-            fabricType:response.data.data.fabrictype
-          }
-        })
-        setsimiliarproducts(similiarProductresponse.data.data);
-
-        const ratingres = await axiosInstance.get(`/Rentals/rental-rating`, {
-          params: {productid:id},
-          headers:{
-            Authorization :`Bearer ${localStorage.getItem("userData")}`
-          }
+        const ratingres = await axiosInstance.get(`/Rental/rental-rating`, {
+          params: { productid: id },
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("userData")}`,
+          },
         });
-        setrating(ratingres.data.data);
-       
+        if (handlmore) {
+          var temp = ratingres.data.data.slice(0, 5);
+          setrating(temp);
+          setratingloading(false);
+        } else {
+          setrating(ratingres.data.data);
+          setratingloading(false);
+        }
+        const similiarProductresponse = await axiosInstance.get(
+          `/Rental/products`,
+          {
+            params: {
+              pageSize: 8,
+              pageNumber: 1,
+              gender: response.data.data.gender,
+              garmentType: response.data.data.garmenttype,
+              fabricType: response.data.data.fabrictype,
+            },
+          }
+        );
+        const similarproduct = similiarProductresponse.data.data?.filter(
+          (x) => x.id != response?.data.data.id
+        );
+        setsimiliarproducts(similarproduct?.data.data);
       } catch (err) {
         console.log(err);
         setError("Failed to fetch rental data");
@@ -62,12 +84,30 @@ export default function RentalDetail() {
       }
     };
     fetchData();
-  }, [id]);
-  if (loading)
-    return (
-      <Loadercustom></Loadercustom>
-    );
-  if (cloth == null) return notFound() ;
+  }, [handlmore]);
+
+  if (loading) return <Loadercustom></Loadercustom>;
+  if (cloth == null) return notFound();
+
+  const handlePlaceOrder = () => {
+    const orderData = {
+      totalAmount: cloth.price,  
+      paymentMethod: "Cash on Delivery",  
+      shippingAddress: "User's Address",  
+      shippingMethod: "Standard",  
+      shippingCost: 50,  
+      trackingNumber: "12345",  
+      productType: "rental",
+      rentalProductId: cloth.id,
+      quantity: 1, 
+      price: cloth.price,
+    };
+
+    setOrder(orderData);
+
+    router.push("/users/orders");
+  };
+  
   return (
     <>
       <Navbar></Navbar>
@@ -81,19 +121,20 @@ export default function RentalDetail() {
                 alt="loading"
                 className="w-96 h-[300px] object-cover object-left-top rounded-lg"
               />
-             <div>
-             {cloth?.images?.map((image, index) => (
-              image.imagePath!=activeimage && (
-                <img
-                  onClick={() => setactiveimage(image.imagePath)}
-                  key={index}
-                  src={image.imagePath}
-                  alt={`Image ${index + 1}`}
-                  className="w-[50px] h-[50px] object-cover rounded-lg mt-4 mx-3"
-                />
-              )
-            ))}
-             </div>
+              <div>
+                {cloth?.images?.map(
+                  (image, index) =>
+                    image.imagePath != activeimage && (
+                      <img
+                        onClick={() => setactiveimage(image.imagePath)}
+                        key={index}
+                        src={image.imagePath}
+                        alt={`Image ${index + 1}`}
+                        className="w-[50px] h-[50px] object-cover rounded-lg mt-4 mx-3"
+                      />
+                    )
+                )}
+              </div>
             </div>
 
             {/* Title, Price, Description, and Buttons on the right side */}
@@ -101,16 +142,18 @@ export default function RentalDetail() {
               <h1 className="text-3xl font-bold">{cloth.title}</h1>
               <p className="text-lg mt-4">{cloth.description}</p>
               <div className="text-xl font-bold mt-4 flex w-[100%] items-center justify-between">
-                <p>Price: ₹{cloth?.price}</p>
-                <FontAwesomeIcon icon={faHeart} onClick={()=>setclicked(!clicked)} className={clicked?"text-red-600":"text-gray-300"}/>
-                </div>
+                <p>₹{cloth?.price}</p>
+                <FontAwesomeIcon
+                  icon={faHeart}
+                  onClick={() => setclicked(!clicked)}
+                  className={clicked ? "text-red-600" : "text-gray-300"}
+                />
+              </div>
               {/* Buttons */}
               <div className="mt-6 font-sans">
-                <Link href={"/users/Design"}>
-                  <button className="bg-violet-950 text-white px-6 py-2 rounded-full mr-4 hover:bg-zinc-600">
+                  <button className="bg-violet-950 text-white px-6 py-2 rounded-full mr-4 hover:bg-zinc-600" onClick={()=>handlePlaceOrder()}>
                     Place an order
                   </button>
-                </Link>
                 <button className="bg-yellow-600 text-white px-6 py-2 rounded-full hover:bg-yellow-700">
                   Add to cart
                 </button>
@@ -142,16 +185,30 @@ export default function RentalDetail() {
             {/* Reviews Section */}
             <div className="mt-4">
               <h4 className="text-md font-medium">Rating Review</h4>
-              <div className="grid gap-2 lg:grid-cols-3 sm:grid-cols-12">
-                {rating?rating.map((x, i) => (
-                  <RatingCard key={i} data={x}></RatingCard>
-                )):
-                <div className="text-gray-500 ">No Reviews Yet..</div>
-                }
+              <div className="grid gap-2 lg:grid-cols-3 sm:grid-cols-12 relative">
+                {rating ? (
+                  rating.map((x, i) => (
+                    <RatingCard key={i} data={x}></RatingCard>
+                  ))
+                ) : (
+                  <div className="text-gray-500 ">No Reviews Yet..</div>
+                )}
               </div>
-              <button className="p-3 rounded-[20px] bg-[#0F172A] my-4 w-max text-white text-[12px] block m-auto">
-                View More
+              <div className="flex justify-between mt-4">
+              {ratingloading && (
+                <p className="text-gray-500">Loading...</p>
+              )}
+              <button
+                className="p-3 rounded-[20px] bg-[#0F172A] my-4 w-max text-white text-[12px] block m-auto"
+                onClick={() => {
+                  sethandlmore(!handlmore);
+                  setratingloading(true);
+                }}
+              >
+                {handlmore ? "View more" : "View less"}
               </button>
+              </div>
+               
             </div>
           </div>
 
