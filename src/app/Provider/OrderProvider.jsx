@@ -1,4 +1,3 @@
-// OrderProvider.js
 "use client";
 import React, { createContext, useState, useEffect } from 'react';
 
@@ -17,13 +16,13 @@ const OrderProvider = ({ children }) => {
     quantity: 0,
     price: 0
   });
-
+  const [selectedproduct, setselectedproduct] = useState([]);
   useEffect(() => {
     localStorage.setItem('order', JSON.stringify(order)); 
   }, [order]);
 
   return (
-    <OrderContext.Provider value={{ order, setOrder }}>
+    <OrderContext.Provider value={{ order,setOrder,selectedproduct,setselectedproduct}}>
       {children}
     </OrderContext.Provider>
   );

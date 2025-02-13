@@ -3,7 +3,6 @@ import React, { useEffect, useState } from "react";
 import axiosInstance from "../../../../../../axios/axiosinstance/axiosInstance";
 
 const AddressManager = ({
-  handleSubmit,
   selectedAddress,
   setSelectedAddress,
   data,
@@ -103,7 +102,7 @@ const AddressManager = ({
  
   
   return (
-    <div className="p-4 max-w-xl mx-auto block m-auto">
+    <div className="p-4 w-full mx-auto block m-auto mt-0">
       <h2 className="text-xl font-bold mb-4">Manage Addresses</h2>
 
       {/* Address List */}
@@ -235,12 +234,7 @@ const AddressManager = ({
           </button>
         </div>
       )}
-      <button
-        onClick={() => handleSubmit()}
-        className="w-full p-2 bg-blue-600 text-white rounded-md mt-3"
-      >
-        Deliver Here
-      </button>
+   
       {/* New Address Form */}
       {isaddingnew ? (
         <div className="border p-4 rounded-md bg-gray-100 mt-3">

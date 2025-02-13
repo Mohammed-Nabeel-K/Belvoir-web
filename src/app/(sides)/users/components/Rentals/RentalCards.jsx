@@ -1,10 +1,36 @@
 
 "use client";
-import React, { useState, useEffect } from "react";
-import Link from "next/link";
+import React from "react";
 
-const RentalCards = ({data,isLoading,error}) => {
+import axiosInstance from "../../../../../../axios/axiosinstance/axiosInstance";
+
+
+const RentalCards = ({data,isLoading}) => {
+
+  const addToCart =  async(item) => {
+
+    console.log(item)
+
+    const token = localStorage.getItem("userData");
+
+    try {
+      const response = await axiosInstance.post('/RentalCart/AddToCart', {
+        productId: item.id,
+        quantity: 1,
+      }, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      return response.data
+
+      console.log(response.data)
+
+    } catch (error) {
+      console.error('cart', error)
+    }
+  }
   
+  console.log(data)
+
   if (isLoading) {
     return (
       <div className="flex justify-center mx-auto mt-[100px] h-screen">
@@ -15,9 +41,9 @@ const RentalCards = ({data,isLoading,error}) => {
   return (  
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6  px-3">
       {data ? (
-        data.map((item,i) => (
+        data.map((item) => (
           <div
-            key={i}
+            key={item.id}
             className="p-4 bg-gray-100  flex flex-col rounded-lg mx-1 h-max shadow-custom"
           >
             {/* Image and Title */}
@@ -33,12 +59,20 @@ const RentalCards = ({data,isLoading,error}) => {
 
               {/* Price and View Button */}
               <div className="flex items-center justify-between">
+
+                <div className="text-indigo-600 font-bold text-[12px]">₹{item.offerPrice}</div>
+              
+                
+                  <button className="bg-black text-white rounded-2xl px-4 py-1 hover:bg-white hover:text-black border transition text-[10px]" onClick={() => addToCart(item)}>
+                    Add To Cart
+
                 <div className="text-gray-900 font-bold text-[12px]">₹{item.offerPrice}</div>
-                <Link href={`/users/Rentals/${item.id}`}>
+                <Link href={`/users/rentals/${item.id}`}>
                   <button className="bg-black text-white rounded-2xl px-4 py-1 hover:bg-white hover:text-black border transition text-[10px]">
                     View
+
                   </button>
-                </Link>
+                
               </div>
             </div>
           </div>
@@ -53,3 +87,4 @@ const RentalCards = ({data,isLoading,error}) => {
 };
 
 export default RentalCards;
+

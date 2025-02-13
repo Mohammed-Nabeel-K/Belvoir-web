@@ -1,11 +1,20 @@
 "use client";
-import Ordertable from "@/app/(sides)/admin/components/ui/tailor-order-table/ordertable";
+import Ordertable from "@/app/(sides)/admin/components/ui/Tailor-order-table/ordertable";
 import { ChevronsDown, ChevronsUp, FilterIcon } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import axiosInstance from "../../../../../../../axios/axiosinstance/axiosInstance";
 
 export default function Page() {
   const [drop, setDrop] = useState(false);
-
+  const [data, setData] = useState()
+   useEffect(() => {
+    const fetchdata=async()=>{
+      var response =await axiosInstance.get("/Order/tailor");
+      setData(response.data.data);
+    } 
+    fetchdata()
+   }, [])
+   
   return (
     <div className="min-h-screen w-full  flex flex-col p-4 gap-4">
       <div className="flex justify-between items-end">

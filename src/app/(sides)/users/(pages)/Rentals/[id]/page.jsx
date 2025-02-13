@@ -7,7 +7,7 @@ import Link from "next/link";
 import RatingCard from "../../../components/Rentals/RatingCard";
 import { useContext, useEffect, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faHeart } from "@fortawesome/free-solid-svg-icons";
+import { faCaretLeft, faCaretRight, faHeart } from "@fortawesome/free-solid-svg-icons";
 import Loadercustom from "../../../components/ui/Loader";
 import Image from "next/image";
 import Navbar from "../../../components/ui/navbar/Navbar";
@@ -31,9 +31,12 @@ export default function RentalDetail() {
     garmenttype: "",
     fabrictype: "",
   });
+  const [quantity, setQuantity] = useState(1);
+
   const [ratingloading, setratingloading] = useState(false);
 
-  const { order, setOrder } = useContext(OrderContext);
+  const { order, setOrder, selectedproduct, setselectedproduct } =
+    useContext(OrderContext);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -89,25 +92,39 @@ export default function RentalDetail() {
   if (loading) return <Loadercustom></Loadercustom>;
   if (cloth == null) return notFound();
 
-  const handlePlaceOrder = () => {
+  const handlePlaceOrder = (cloth) => {
     const orderData = {
-      totalAmount: cloth.price,  
-      paymentMethod: "Cash on Delivery",  
-      shippingAddress: "User's Address",  
-      shippingMethod: "Standard",  
-      shippingCost: 50,  
-      trackingNumber: "12345",  
+      totalAmount: cloth.price,
+      paymentMethod: "Cash on Delivery",
+      shippingAddress: "User's Address",
+      shippingMethod: "Standard",
+      shippingCost: 50,
+      trackingNumber: "12345",
       productType: "rental",
       rentalProductId: cloth.id,
-      quantity: 1, 
+      quantity: 1,
       price: cloth.price,
     };
 
     setOrder(orderData);
+    let selectedProducts =
+      JSON.parse(localStorage.getItem("selectedProduct")) || [];
 
-    router.push("/users/orders");
+    selectedProducts.push(cloth);
+
+    localStorage.setItem("selectedProduct", JSON.stringify(selectedProducts));
+    router.push("/users/checkout");
   };
-  
+
+  const handleIncrement = () => {
+    setQuantity(quantity + 1);
+  };
+
+  const handleDecrement = () => {
+    if (quantity > 1) {
+      setQuantity(quantity - 1);
+    }
+  };
   return (
     <>
       <Navbar></Navbar>
@@ -150,13 +167,22 @@ export default function RentalDetail() {
                 />
               </div>
               {/* Buttons */}
-              <div className="mt-6 font-sans">
-                  <button className="bg-violet-950 text-white px-6 py-2 rounded-full mr-4 hover:bg-zinc-600" onClick={()=>handlePlaceOrder()}>
-                    Place an order
-                  </button>
+              <div className="mt-6 font-sans flex justify-between">
+                <button
+                  className="bg-violet-950 text-white px-6 py-2 rounded-full mr-4 hover:bg-zinc-600"
+                  onClick={() => handlePlaceOrder({ ...cloth })}
+                >
+                  Place an order
+                </button>
+                
                 <button className="bg-yellow-600 text-white px-6 py-2 rounded-full hover:bg-yellow-700">
                   Add to cart
                 </button>
+                <div className="p-2 border-[2px] border-black rounded-l-2xl">
+                  <button onClick={()=>handleDecrement()}><FontAwesomeIcon icon={faCaretLeft} className="size-5 cursor-pointer"/></button>
+                  {quantity}
+                  <button onClick={()=>handleIncrement()}><FontAwesomeIcon icon={faCaretRight} className="size-5 cursor-pointer"/></button>
+                </div>
               </div>
             </div>
           </div>
@@ -195,20 +221,17 @@ export default function RentalDetail() {
                 )}
               </div>
               <div className="flex justify-between mt-4">
-              {ratingloading && (
-                <p className="text-gray-500">Loading...</p>
-              )}
-              <button
-                className="p-3 rounded-[20px] bg-[#0F172A] my-4 w-max text-white text-[12px] block m-auto"
-                onClick={() => {
-                  sethandlmore(!handlmore);
-                  setratingloading(true);
-                }}
-              >
-                {handlmore ? "View more" : "View less"}
-              </button>
+                {ratingloading && <p className="text-gray-500">Loading...</p>}
+                <button
+                  className="p-3 rounded-[20px] bg-[#0F172A] my-4 w-max text-white text-[12px] block m-auto"
+                  onClick={() => {
+                    sethandlmore(!handlmore);
+                    setratingloading(true);
+                  }}
+                >
+                  {handlmore ? "View more" : "View less"}
+                </button>
               </div>
-               
             </div>
           </div>
 

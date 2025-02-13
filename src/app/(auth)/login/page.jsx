@@ -38,10 +38,14 @@ const Login = () => {
       localStorage.setItem("userData", response.data.data.accessToken);
 
       setStatus("succeeded");
+
       router.push("/");
+
     } catch (error) {
       setError(error.response?.data?.message || "Something went wrong");
+
       console.error("Login error:", error);
+      
       setStatus("failed");
     }
   };

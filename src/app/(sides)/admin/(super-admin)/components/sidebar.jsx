@@ -53,12 +53,12 @@ const Sidebar = () => {
               Tailor List
             </Link>
           </li>
-          <li className="flex items-center gap-3 hover:bg-gray-700 p-3 rounded-lg transition-all">
+          {/* <li className="flex items-center gap-3 hover:bg-gray-700 p-3 rounded-lg transition-all">
             <MdOutlineLocalLaundryService size={20} />
             <Link href="/admin/laundry-list" className="flex-1">
               Laundry List
             </Link>
-          </li>
+          </li> */}
           <li className="flex items-center gap-3 hover:bg-gray-700 p-3 rounded-lg transition-all">
             <FaTruck size={20} />
             <Link href="/admin/deliveryboy-list" className="flex-1">

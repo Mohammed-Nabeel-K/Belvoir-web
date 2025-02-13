@@ -1,6 +1,8 @@
 // app/layout.tsx
 import "../../styles/globals.css";
 // import "./globals.css";
+import 'animate.css';
+
 import Providers from "../app/Provider/Providers"
 import {OrderProvider} from "../app/Provider/OrderProvider"
 export default function Layout({
