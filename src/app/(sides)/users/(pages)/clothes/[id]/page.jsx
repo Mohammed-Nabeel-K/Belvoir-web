@@ -7,7 +7,7 @@ import axiosInstance from "../../../../../../../axios/axiosinstance/axiosInstanc
 import SimilarProducts from "../../../components/clothes/SimilarProducts";
 import Footer from "../../../components/ui/footer/Footer";
 import Navbar from "../../../components/ui/navbar/Navbar";
-import RatingCard from "../../../components/Clothes/RatingCard";
+import RatingCard from "../../../components/Rentals/RatingCard";
 import { useRouter } from "next/navigation";
 import LoadingUi from "../../../components/ui/loading/loadingui";
 
