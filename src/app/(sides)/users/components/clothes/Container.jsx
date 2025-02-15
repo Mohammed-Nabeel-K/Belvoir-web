@@ -23,7 +23,6 @@ function Container() {
 
 
 
-  const pageSize = 4; 
 
   const { data, isLoading } = useFetchAllClothes(query,"price",sort,Material,Color,designPattern,minPrice,maxPrice,pageNo,pageSize);
   const [filteredData, setFilteredData] = useState([]);

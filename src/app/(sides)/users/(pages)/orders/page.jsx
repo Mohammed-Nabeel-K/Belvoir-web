@@ -60,8 +60,8 @@ const Orders = () => {
         <Loader></Loader>
       ) : (
         <div className="p-6">
-          <div className="flex mb-10">
-            <h2 className="text-2xl text-[#0E0E25]  mb-4 w-max block mx-auto">
+          <div className="flex mb-10 justify-between">
+            <h2 className="text-2xl text-[#0E0E25]  mb-4 w-max ">
               Your Orders
             </h2>
             <select
