@@ -131,7 +131,7 @@ import AddressManager from "../../components/Checkout/Address";
 import axiosInstance from "../../../../../../axios/axiosinstance/axiosInstance";
 import Lodingcustom from "../../components/ui/Loader"
 import Navbar from "../../components/ui/navbar/Navbar";
-import OrderSummaryTailoring from "../../components/summary/OrderSummary-tailoring";
+import OrderSummaryTailoring from "../../components/summary/OrderSummary-tailoring"
 function OrderPage() {
   const [step, setStep] = useState(1); 
   const [selectedAddress, setSelectedAddress] = useState(null);
