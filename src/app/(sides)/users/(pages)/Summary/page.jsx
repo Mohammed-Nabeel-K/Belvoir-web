@@ -132,7 +132,7 @@ import axiosInstance from "../../../../../../axios/axiosinstance/axiosInstance";
 import Lodingcustom from "../../components/ui/Loader"
 import Navbar from "../../components/ui/navbar/Navbar";
 
-import OrderSummaryTailoring from "../../components/summary/OrderSummary-tailoring";
+import OrderSummary from "../../components/Summary/OrderSummary-tailoring";
 
 function OrderPage() {
   const [step, setStep] = useState(1); 
@@ -176,7 +176,7 @@ function OrderPage() {
         selectedAddress={selectedAddress}
         setSelectedAddress={setSelectedAddress}
       />
-      <OrderSummaryTailoring selectedAddress={selectedAddress} setSelectedAddress={setSelectedAddress}  setloading={setloading}
+      <OrderSummary selectedAddress={selectedAddress} setSelectedAddress={setSelectedAddress}  setloading={setloading}
  />
   </section>}
   </>

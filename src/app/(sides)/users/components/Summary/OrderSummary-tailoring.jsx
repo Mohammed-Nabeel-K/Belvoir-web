@@ -6,7 +6,12 @@ import { ToastContainer, toast } from "react-toastify";
 import loadRazorpay from "../../../../../../utils/LoadRazorpay";
 import { useRouter } from "next/navigation";
 
+
+
+
+
 const OrderSummaryTailoring = ({ selectedAddress }) => {
+  
   const [selectedCloth, setSelectedCloth] = useState(null);
   const [selectedDesign, setSelectedDesign] = useState(null);
   const [selectedMeasurements, setSelectedMeasurements] = useState(null);
