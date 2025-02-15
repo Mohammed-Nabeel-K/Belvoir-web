@@ -44,7 +44,7 @@ const RentalCards = ({ data, isLoading }) => {
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6  px-3">
       {data ? (
         data.map((item) => (
-          <Link href={`/users/rentals/${item.id}`}>
+          <Link href={`/users/rental/${item.id}`}>
             <div
               key={item.id}
               className="p-4 bg-gray-100  flex flex-col rounded-lg mx-1 h-max shadow-custom hover:shadow-none"
@@ -69,7 +69,16 @@ const RentalCards = ({ data, isLoading }) => {
                     onClick={() => addToCart(item)}
                   >
                     Add To Cart
+                    </button>
+
+                <div className="text-gray-900 font-bold text-[12px]">₹{item.offerPrice}</div>
+                <Link href={`/users/rentals/${item.id}`}>
+                  <button className="bg-black text-white rounded-2xl px-4 py-1 hover:bg-white hover:text-black border transition text-[10px]">
+                    View
+
                   </button>
+                  </Link>
+                
 
                   <div className="text-gray-900 font-bold text-[12px]">
                     ₹{item.offerPrice}
@@ -85,6 +94,7 @@ const RentalCards = ({ data, isLoading }) => {
         </div>
       )}
     </div>
+    
   );
 };
 

@@ -20,7 +20,7 @@ export const useFetchAllDesigns = (
   PageSize=""
   ) => {
     return useQuery({
-      queryKey: ["designs", Name, Category,MinPrice,MaxPrice, SortBy, IsDescending, PageNo, PageSize],
+      queryKey: ["designs", Name, Category,MinPrice,MaxPrice, IsDescending, PageNo, PageSize],
       queryFn: () =>
         fetchAlldesigns({
           Name,

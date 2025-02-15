@@ -22,7 +22,7 @@ const DesignContainer = () => {
     designType,
     minPrice,
     maxPrice,
-    "",
+    "price",
     sort,
     pageNo,
     pageSize

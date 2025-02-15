@@ -34,8 +34,8 @@ export const fetchAllClothes = async ({
 
 
   
-export const fetchClothesWithoutQuery=async()=>{
-    const response=await axiosInstance.get("/Clothes/get");
+export const fetchClothesforAdmin=async()=>{
+    const response=await axiosInstance.get(`/Clothes/get?SearchTerm=${search}&PageNo=${pageNo}&PageSize=${pageSize}`);
     return response.data
 }
 

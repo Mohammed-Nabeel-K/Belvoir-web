@@ -25,6 +25,7 @@ const Address = () => {
     fetchAddresses();
   }, []);
 
+  
   // Fetch addresses from API
   const fetchAddresses = async () => {
     setLoading(true);

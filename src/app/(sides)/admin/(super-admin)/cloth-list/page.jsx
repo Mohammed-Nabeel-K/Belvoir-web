@@ -5,6 +5,7 @@ import {
   useDeleteClothes,
   useEditClothes,
   useFetchAllClothes,
+  useFetchClothesAdmin,
 } from "../../../../../hooks/clothesHook";
 import { toast, ToastContainer } from "react-toastify";
 
@@ -36,7 +37,8 @@ const ClothList = () => {
     setSearchQuery(e.target.value);
   };
 
-  const { data, refetch } = useFetchAllClothes(searchQuery, page, limit);
+  const { data, refetch } = useFetchClothesAdmin(searchQuery, page, limit);
+  console.log(data)
   const { mutate: addClothes } = useAddClothes();
   const { mutate: deleteClothes } = useDeleteClothes();
   const { mutate: editClothes } = useEditClothes();

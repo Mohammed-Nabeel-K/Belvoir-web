@@ -19,6 +19,9 @@ function Container() {
   const [maxPrice,setMaxPrice]=useState("");
   const [Color,setColor]=useState([]);
 
+
+
+
   const pageSize = 10; 
 
 

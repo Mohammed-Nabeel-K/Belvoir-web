@@ -1,5 +1,5 @@
 import {  useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
-import { addClothes, clothesfilterBy, deleteClothes,  fetchAllClothes } from "../api/clothes-api"
+import { addClothes, clothesfilterBy, deleteClothes,  fetchAllClothes, fetchClothesforAdmin } from "../api/clothes-api"
 
 
 
@@ -16,7 +16,6 @@ export const useFetchAllClothes = (
   pageNo = 1,
   pageSize = 10
 ) => {
-  console.log("hoook",Material)
   return useQuery({
     queryKey: ["clothes", search, sortBy, isDescending, Material,Color,DesignPattern, minPrice, maxPrice, pageNo, pageSize],
     queryFn: () =>
@@ -37,11 +36,32 @@ export const useFetchAllClothes = (
   });
 };
 
+export const useFetchClothesAdmin=(
+  search,
+  pageNo,
+  pageSize
+
+)=>{
+  return useQuery({
+    queryKey: ["clothes", search,pageNo, pageSize],
+    queryFn: () =>
+      fetchClothesforAdmin({
+        search, 
+        pageNo,
+        pageSize
+      }),
+    keepPreviousData: true, // Helps with pagination performance
+    staleTime: 300000, // 5 minutes to avoid unnecessary refetching
+  });
+};
+
+
+
 
 
 export const useClothesFilterBy=()=>{
   return useQuery({
-    queryKey:['clothes'],
+    queryKey:['admin-clothes'],
     queryFn:clothesfilterBy
   })
 };
@@ -84,6 +104,6 @@ export const useDeleteClothes=()=>{
 // }
 export const useEditClothes = () => {
     return useMutation(({ id, formData }) =>
-      axiosInstance.put(`/Clothes/update${id}`, formData)
+      axiosInstance.put(`/Clothes/update/${id}`, formData)
     );
   };

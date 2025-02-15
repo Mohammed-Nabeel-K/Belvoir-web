@@ -130,7 +130,7 @@ export default function Hero() {
               Affordable Styling: Get the style you want at a fraction of the
               cost.
             </p>
-            <Link href={"/users/Rentals"}>
+            <Link href={"/users/rental"}>
               <button className="bg-[#1a1b3f] hover:bg-[#2a2b4f] text-white text-sm p-2 rounded-sm">
                 BOOK NOW
               </button>

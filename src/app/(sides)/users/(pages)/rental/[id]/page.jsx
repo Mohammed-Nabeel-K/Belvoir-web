@@ -104,27 +104,31 @@ export default function RentalDetail() {
       return;
     }
     try {
-      await axiosInstance.post(
+      const response=await axiosInstance.post(
         "/Rental/rental-rating",
         {
-           message: userRating,
-           ratingvalue: reviewMessage
+          message: reviewMessage, // Correct message mapping
+          ratingvalue: userRating, // Correct rating value mapping
         },
         {
           params: {
-            productid: id,
+            productid: id, // Ensure product ID is passed in params correctly
           },
-
           headers: {
             Authorization: `Bearer ${localStorage.getItem("userData")}`,
           },
         }
       );
       toast.success("Review submitted successfully!");
+     
       setUserRating(0);
       setReviewMessage("");
     } catch (error) {
+      if (error.response.status==400) {
+        toast.error("User already reviewed for this product!");
+      }else{
       toast.error("Failed to submit review. Please try again.");
+      }
       if (error.response.status == 401) {
         toast.error("please login");
         router.push("/login");
@@ -284,7 +288,7 @@ export default function RentalDetail() {
               ></textarea>
               <button
                 className="mt-3 bg-[#0E0E25] text-white px-4 py-2 rounded-lg "
-                onClick={handleRatingSubmit}
+                onClick={()=>handleRatingSubmit()}
               >
                 Submit Review
               </button>

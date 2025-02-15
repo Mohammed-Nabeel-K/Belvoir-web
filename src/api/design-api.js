@@ -32,7 +32,24 @@ export const getMeasurment=async(id)=>{
 // }
 
 
+// export const saveMeasurement = async (values) => {
+//     const response = await axiosInstance.post(`/Design/add/mesurment/values`, values);
+//     return response.data;
+// };
+
 export const saveMeasurement = async (values) => {
-    const response = await axiosInstance.post(`/Design/add/mesurment/values`, values);
+   
+    const response = await axiosInstance.post(
+      `/Design/add/mesurment/values`, 
+      values,
+      {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("userData")}`, // Attach token in the request headers
+        },
+      }
+    );
+  
     return response.data;
-};
+  };
+  
+  
