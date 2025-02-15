@@ -1,4 +1,3 @@
-import AboutSection from "./(sides)/users/components/ui/aboutsc/aboutsc";
 import Footer from "./(sides)/users/components/ui/footer/Footer";
 import Hero from "./(sides)/users/components/ui/hero/hero";
 import Navbar from "./(sides)/users/components/ui/navbar/Navbar";
@@ -16,7 +15,6 @@ export default function Home() {
 
       <WhyBelvoirSection/>
 
-      <AboutSection/>
 
       <Footer/>
 

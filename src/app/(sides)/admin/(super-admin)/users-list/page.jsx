@@ -7,6 +7,8 @@ import {
 } from "../../../../../hooks/usersHooks";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { useRouter } from "next/navigation";
+import { Router } from "next/router";
 
 const UserListPage = () => {
   const [searchQuery, setSearchQuery] = useState("");
@@ -15,6 +17,7 @@ const UserListPage = () => {
   const [limit, setLimit] = useState(10);
   const [isLoading, setIsLoading] = useState(true);
   const [isFirstLoad, setIsFirstLoad] = useState(true);
+  const router=useRouter()
 
   const { data, refetch, isFetching } = UsefetchAllUsers(
     limit,
@@ -58,7 +61,8 @@ const UserListPage = () => {
   };
 
   const handleRowClick = (user) => {
-    setSelectedUser(user);
+    router.push(`/admin/users-list/${user.id}`)
+    // setSelectedUser(user);
   };
 
   const closeModal = () => {
@@ -216,7 +220,7 @@ const UserListPage = () => {
               </div>
             )}
           </div>
-
+{/* 
           {selectedUser && (
             <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
               <div className="bg-white rounded-xl shadow-sm w-1/3 p-6">
@@ -247,8 +251,8 @@ const UserListPage = () => {
                 </div>
               </div>
             </div>
-          )}
-        </div>
+          )}*/}
+         </div> 
       )}
     </>
   );

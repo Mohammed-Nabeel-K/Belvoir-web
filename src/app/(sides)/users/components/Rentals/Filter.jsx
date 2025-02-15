@@ -1,6 +1,8 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import axiosInstance from "../../../../../../axios/axiosinstance/axiosInstance";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faTrashCan } from "@fortawesome/free-solid-svg-icons";
 
 const Filter = ({
   filterdata,
@@ -34,7 +36,7 @@ const Filter = ({
   }, []);
 
   return (
-      <div className="lg:w-[200px] lg:border-r-[1px] lg:border-t-[1px] lg:pt-5 lg:border-b-[1px] pb-3">
+      <div className="lg:w-[200px] lg:border-r-[1px] lg:border-t-[1px] lg:pt-5 lg:border-b-[1px] p-7 pb-3 lg:bg-gray-100 bg-white rounded-[10px]">
         {/* Gender */}
         <div className="mb-6">
           <label className="block text-m font-semibold text-gray-800">
@@ -71,11 +73,11 @@ const Filter = ({
             <div className="flex">
               <select
                 onChange={(e) => setMinPrice(Number(e.target.value))}
-                className="bg-[#0E0E25] text-[12px] outline-none rounded-md text-white"
+                className="border-[#0E0E25] border-[1px] text-[12px] outline-none rounded-md text-[#0E0E25]"
                 value={minprice}
               >
                 <option defaultChecked Value={" "}>
-                  Min-price
+                  min
                 </option>
                 <option value={"100"}>100</option>
                 <option value={"500"}>500</option>
@@ -86,10 +88,10 @@ const Filter = ({
               <select
                 value={maxprice}
                 onChange={(e) => setMaxPrice(Number(e.target.value))}
-                className="bg-[#0E0E25] text-[12px] outline-none rounded-md text-white"
+                className="border-[#0E0E25] border-[1px] text-[12px] outline-none rounded-md text-[#0E0E25]"
               >
                 <option defaultChecked value={""}>
-                  Max-price
+                  max
                 </option>
                 <option value="500" disabled={500 <= minprice}>
                   500
@@ -160,7 +162,7 @@ const Filter = ({
         </div>
         <div className="flex justify-center">
           <button
-            className="px-3 py-1  text-[12px] text-white bg-[#0E0E25] rounded-md"
+            className="px-3 flex py-1  text-[12px] text-[#0E0E25] border-[#0E0E25] border-[2px] rounded-md"
             onClick={() => {
               setfilterdata(initialFilterData);
               setMaxPrice("");
@@ -168,6 +170,7 @@ const Filter = ({
             }}
           >
             reset
+            <FontAwesomeIcon icon={faTrashCan} className="size-3 my-auto ml-2"/>
           </button>
         </div>
       </div>

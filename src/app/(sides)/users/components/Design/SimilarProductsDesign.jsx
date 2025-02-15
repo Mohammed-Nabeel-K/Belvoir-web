@@ -1,10 +1,10 @@
 "use client";
 import React from "react";
-import { useFetchDesignWithoutQuery } from "../../../../../hooks/designHook";
+import { useFetchAllDesigns} from "../../../../../hooks/designHook";
 import Link from "next/link";
 
 const SimilarProducts = ({ category, id }) => {
-  const { data } = useFetchDesignWithoutQuery()
+  const { data } = useFetchAllDesigns
 
   const similarDesign = data?.data.filter(
     (item) => item.category === category && item.id !== id
@@ -12,7 +12,7 @@ const SimilarProducts = ({ category, id }) => {
 
   return (
     <div>
-      <h2 className="text-xl font-bold mt-6">Similar Products</h2>
+      <h2 className="text-xl font-bold mt-6">Similar Designs</h2>
       <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-4 gap-4 sm:gap-6 mt-4">
         {similarDesign?.length > 0 ? (
           similarDesign.map((item) => (
@@ -45,7 +45,7 @@ const SimilarProducts = ({ category, id }) => {
             </div>
           ))
         ) : (
-          <p className="text-gray-600">No similar products found.</p>
+          <p className="text-gray-600">No similar designs found.</p>
         )}
       </div>
     </div>

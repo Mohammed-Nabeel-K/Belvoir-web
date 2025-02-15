@@ -1,11 +1,15 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import axiosInstance from '../../../../../../../axios/axiosinstance/axiosInstance';
+import axiosInstance from "../../../../../../../axios/axiosinstance/axiosInstance";
 import { X, Minus, Plus } from "lucide-react";
 import LoadingSkeleton from "../loading/loadingskel";
-
+import { useRouter } from "next/navigation";
+import CustomLoading from "../../ui/Loader"
+import { toast } from "react-toastify";
 function ShoppingCart() {
+
+  const router=useRouter()
   // State management
   const [cartItems, setCartItems] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -21,41 +25,58 @@ function ShoppingCart() {
       if (!token) return console.error("Authentication required");
 
       const response = await axiosInstance.get("/RentalCart/my-cart", {
-        headers: { Authorization: `Bearer ${token}` }
+        headers: { Authorization: `Bearer ${token}` },
       });
-      
+
       setCartItems(response.data.data.items || []);
     } catch (err) {
-      setError(err.response?.data?.message || "Failed to load your fashion selections");
+      setError(
+        err.response?.data?.message || "Failed to load your fashion selections"
+      );
+      if(err.response.status==401){
+              toast.error("please login");
+              router.push("/login")
+      }
     } finally {
       setIsLoading(false);
     }
   };
 
-  useEffect(() => { fetchCartItems() }, []);
+  useEffect(() => {
+    fetchCartItems();
+  }, []);
 
   // Cart calculations
-  const total = cartItems.reduce((sum, item) => sum + (item.itemPrice * item.quantity), 0);
+  const total = cartItems.reduce(
+    (sum, item) => sum + item.itemPrice * item.quantity,
+    0
+  );
 
   // Loading and error states
-  if (isLoading) return (
-    <div className="min-h-screen flex-center">
-      <LoadingSkeleton />
-    </div>
-  );
+  if (isLoading)
+    return (
+      <CustomLoading></CustomLoading>
+    );
 
-  if (error) return (
-    <div className="min-h-screen flex-center text-red-500 text-lg">
-      ⚠️ {error}
-    </div>
-  );
-
+  if (error)
+    return (
+      <div className="min-h-screen flex-center text-red-500 text-lg">
+        ⚠️ {error}
+      </div>
+    );
+   const handlcheckout=()=>{
+    router.push("/users/checkout")
+   }
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       {/* Header Section */}
       <header className="mb-8 text-center space-y-2">
-        <h1 className="text-3xl font-bold text-gray-900">Your Style Selections</h1>
-        <p className="text-gray-500">{cartItems.length} items in your wardrobe</p>
+        <h1 className="text-3xl font-bold text-gray-900">
+          Your Style Selections
+        </h1>
+        <p className="text-gray-500">
+          {cartItems.length} items in your wardrobe
+        </p>
       </header>
 
       {/* Empty State */}
@@ -90,8 +111,12 @@ function ShoppingCart() {
                 {/* Product Info */}
                 <div className="p-2 space-y-1">
                   <div className="flex flex-col">
-                    <h3 className="font-medium text-sm line-clamp-1">{item.productName}</h3>
-                    <span className="text-indigo-600 text-sm">${item.itemPrice}/day</span>
+                    <h3 className="font-medium text-sm line-clamp-1">
+                      {item.productName}
+                    </h3>
+                    <span className="text-indigo-600 text-sm">
+                      ${item.itemPrice}/day
+                    </span>
                   </div>
 
                   {/* Quantity Controls */}
@@ -100,7 +125,9 @@ function ShoppingCart() {
                       <button className="px-1 py-0.5 text-gray-500 hover:bg-gray-100 rounded-l">
                         <Minus className="h-2 w-2" />
                       </button>
-                      <span className="px-1 w-4 text-center">{item.quantity}</span>
+                      <span className="px-1 w-4 text-center">
+                        {item.quantity}
+                      </span>
                       <button className="px-1 py-0.5 text-gray-500 hover:bg-gray-100 rounded-r">
                         <Plus className="h-2 w-2" />
                       </button>
@@ -119,11 +146,14 @@ function ShoppingCart() {
             <div className="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
               <div className="space-y-1">
                 <div className="text-xl font-bold">
-                  Total Estimate: <span className="text-indigo-600">${total.toFixed(2)}</span>
+                  Total Estimate:{" "}
+                  <span className="text-indigo-600">${total.toFixed(2)}</span>
                 </div>
-                <p className="text-sm text-gray-500">Includes all selected items</p>
+                <p className="text-sm text-gray-500">
+                  Includes all selected items
+                </p>
               </div>
-              <button className="bg-indigo-600 text-white px-8 py-3 rounded-lg hover:bg-indigo-700 transition">
+              <button className="bg-indigo-600 text-white px-8 py-3 rounded-lg hover:bg-indigo-700 transition" onClick={()=>handlcheckout()}>
                 Secure Checkout
               </button>
             </div>
@@ -136,21 +166,10 @@ function ShoppingCart() {
 
 export default ShoppingCart;
 
-
-
-
-
-
-
-
-
-
-
-
 //   // const updateQuantity = async (id, newQuantity) => {
 //   //   try {
 //   //     await axiosInstance.put(`/api/cart/${id}`, { quantity: newQuantity })
-//   //     setCartItems(items => items.map(item => 
+//   //     setCartItems(items => items.map(item =>
 //   //       item.id === id ? { ...item, quantity: Math.max(1, newQuantity) } : item
 //   //     ))
 //   //   } catch (err) {

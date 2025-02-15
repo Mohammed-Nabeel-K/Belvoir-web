@@ -10,39 +10,62 @@ function Container() {
   const [filterOpen, setFilterOpen] = useState(false);
   const [query, setQuery] = useState("");
   const [sort, setSort] = useState(false);
-  const [Material, setMaterial] = useState("");
-  const [designPattern, setDesignPattern] = useState("");
+
+  const [Material, setMaterial] = useState([]);
+  const [designPattern, setDesignPattern] = useState([]);
   const [pageNo, setPageNo] = useState(1); 
   const [hasMore, setHasMore] = useState(true);
+  const [minPrice,setMinPrice]=useState("");
+  const [maxPrice,setMaxPrice]=useState("");
+  const [Color,setColor]=useState([]);
+
   const pageSize = 10; 
 
-  const { data, isLoading } = useFetchAllClothes(query, "price", sort, Material, designPattern,"" ,"",pageNo, pageSize);
-  const [filteredData, setFilteredData] = useState([]);
-  console.log(data)
 
+
+  const pageSize = 4; 
+
+  const { data, isLoading } = useFetchAllClothes(query,"price",sort,Material,Color,designPattern,minPrice,maxPrice,pageNo,pageSize);
+  const [filteredData, setFilteredData] = useState([]);
+  // console.log(Material)
+
+
+  
   useEffect(() => {
     if (data?.data) {
-      console.log(data.data)
+  
+      // console.log(data.data)
       if (pageNo === 1) {
         setFilteredData(data.data);
       } else {
+      
         setFilteredData((prev) => [...prev, ...data.data]);
       }
+
+     
+
       if (data.data.length < pageSize) {
         setHasMore(false); 
       }
     }
-  }, [data, pageNo, pageSize]);
+  }, [data, pageNo, pageSize,Material]);
 
+
+ 
   useEffect(() => {
     const handleScroll = () => {
       const { scrollTop, clientHeight, scrollHeight } = document.documentElement;
+
+     
+
       if (scrollTop + clientHeight >= scrollHeight - 10 && !isLoading && hasMore) {
         setPageNo((prev) => prev + 1); 
       }
     };
 
+
     window.addEventListener("scroll", handleScroll);
+
     return () => window.removeEventListener("scroll", handleScroll);
   }, [isLoading, hasMore]);
 
@@ -125,7 +148,7 @@ function Container() {
 
       <div className="flex">
         <div className="hidden md:block">
-          <Filter setMaterial={setMaterial} setDesignPattern={setDesignPattern} />
+          <Filter setMaterial={setMaterial} Material={Material} setDesignPattern={setDesignPattern} setMinPrice={setMinPrice} setMaxPrice={setMaxPrice} setColor={setColor} />
         </div>
 
         {filterOpen && (
@@ -134,7 +157,8 @@ function Container() {
               <button onClick={() => setFilterOpen(false)} className="absolute top-4 right-4">
                 <X size={24} />
               </button>
-              <Filter />
+              <Filter setMaterial={setMaterial} Material={Material} setDesignPattern={setDesignPattern} setMinPrice={setMinPrice} setMaxPrice={setMaxPrice} setColor={setColor} />
+
             </div>
           </div>
         )}

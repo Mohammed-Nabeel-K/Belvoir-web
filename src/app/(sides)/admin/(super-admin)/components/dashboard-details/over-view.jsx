@@ -9,7 +9,7 @@ const OverView = () => {
   console.log(data)
 
   if (isLoading) {
-    return <p>Loading...</p>;
+    return <p></p>
   }
 
   if (isError) {
@@ -25,7 +25,7 @@ const OverView = () => {
             <FaDollarSign size={32} />
           </div>
           <div className="mt-6">
-            <p className="text-sm font-medium text-green-600">Total Sales</p>
+            <p className="text-sm font-medium font-sans text-green-600">Total Sales</p>
             <p className="text-2xl font-bold text-green-900">₹{data?.data?.totalSales || 0}</p>
           </div>
         </div>
@@ -35,7 +35,7 @@ const OverView = () => {
             <FaShoppingCart size={32} />
           </div>
           <div className="mt-6">
-            <p className="text-sm font-medium text-blue-600">Total Orders</p>
+            <p className="text-sm font-medium font-sans text-blue-600">Total Orders</p>
             <p className="text-2xl font-bold text-blue-900">{data?.data?.totalOrders || 0}</p>
           </div>
         </div>
@@ -46,7 +46,7 @@ const OverView = () => {
             <FaBox size={32} />
           </div>
           <div className="mt-6">
-            <p className="text-sm font-medium text-yellow-600">Products Sold</p>
+            <p className="text-sm font-medium font-sans text-yellow-600">Products Sold</p>
             <p className="text-2xl font-bold text-yellow-900">{data?.data?.soldProducts || 0}</p>
           </div>
         </div>
@@ -57,7 +57,7 @@ const OverView = () => {
             <FaUserPlus size={32} />
           </div>
           <div className="mt-6">
-            <p className="text-sm font-medium text-purple-600">New Customers</p>
+            <p className="text-sm font-medium font-sans text-purple-600">New Customers</p>
             <p className="text-2xl font-bold text-purple-900">{data?.data?.newUsers || 0}</p>
           </div>
         </div>

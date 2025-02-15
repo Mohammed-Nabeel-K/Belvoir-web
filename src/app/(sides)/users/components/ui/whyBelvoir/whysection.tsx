@@ -91,7 +91,7 @@ const WhyBelvoirSection: React.FC = () => {
             />
             <p className="text-gray-600">
               At Belvoir, we are committed to eco-friendly practices. We use
-              sustainable fabrics, cleaning solutions, and delivery methods to
+              sustainable fabrics, and delivery methods to
               reduce our environmental impact.
             </p>
           </div>
@@ -128,7 +128,7 @@ const WhyBelvoirSection: React.FC = () => {
               Variety of Services
             </h3>
             <p className="text-gray-600">
-              Whether you need professional tailoring, reliable laundry, or a
+              Whether you need professional tailoring, or a
               wide range of rental options, Belvoir offers a variety of services
               to meet your every need.
             </p>

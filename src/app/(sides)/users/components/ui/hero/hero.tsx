@@ -1,10 +1,31 @@
+"use client";
 import Image from "next/image";
 import Link from "next/link";
+import { useEffect, useState } from "react";
+import axiosInstance from "../../../../../../../axios/axiosinstance/axiosInstance";
 
 // Main landing page component
 export default function Hero() {
+  const [data, setdata] = useState<any|[]>([]);
+  useEffect(() => {
+    try {
+      const fetchdata = async () => {
+        const response = await axiosInstance.get("/Rental/products", {
+          params: {
+            pageNo: 1,
+            pageSize: 8,
+          },
+        });
+        setdata(response.data.data);
+      };
+      fetchdata();
+    } catch (error) {
+      console.log("error in fetching the rental data in home ", error);
+    }
+  }, []);
+
   return (
-    <main className="min-h-screen bg-white">
+    <main className="min-h-screen bg-white  sm:px-2">
       {/* <section className="relative h-[70vh] bg-black"> */}
       {/* <video 
         className="w-screen h-screen object-contain"
@@ -16,7 +37,7 @@ export default function Hero() {
         </video>
       </section> */}
       {/* Hero Section */}
-      <section className="relative h-[70vh] bg-black">
+      <section className="relative h-[70vh] bg-black ">
         <Image
           src="/home/banner.jpg"
           alt="Sewing machine detail"
@@ -38,7 +59,7 @@ export default function Hero() {
       </section>
 
       {/* Services Section */}
-      <section className="max-w-7xl mx-auto px-4 py-16 space-y-16">
+      <section className="max-w-7xl mx-auto lg:px-[50px] sm:px-4 py-16 space-y-16">
         {/* Tailoring Service */}
         <div className="grid md:grid-cols-2 gap-8 items-center">
           <div className="space-y-4">
@@ -91,7 +112,6 @@ export default function Hero() {
 
         {/* Clothing Rentals */}
         <div className="grid md:grid-cols-2 gap-8 items-center">
-          
           <div className="relative h-[300px]">
             <Image
               src="/home/3.jpg"
@@ -122,31 +142,35 @@ export default function Hero() {
       {/* Product Grid */}
       <section className="bg-gray-50 py-16">
         <div className="max-w-7xl mx-auto px-4">
-          <p className="font-bold">Our Rentals </p>
+          <p className="font-bold block mx-auto w-max text-[26px] text-[[#2a2b4f]" >Our Rentals </p>
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-6 p-4">
             {/* Render 6 product cards using Array.map */}
-            {[...Array(8)].map((_, i) => (
-              <div
-                key={i}
-                className="space-y-3 bg-white shadow-lg rounded-lg overflow-hidden"
-              >
-                {/* Image container */}
-                <div className="relative w-full h-72">
-                  <Image
-                    src="/home/suit.jpg" // Replace with your actual image path
-                    alt={`Product ${i + 1}`}
-                    fill
-                    className="object-cover"
-                  />
+            {data &&
+              data.map((items: any, i: number) => (
+                <div
+                  key={i.toString()}
+                  className="space-y-3 bg-white shadow-lg rounded-lg overflow-hidden"
+                >
+                  {/* Image container */}
+                  <div className="relative w-full h-72">
+                    <Image
+                      src={`${
+                        items.images.find((x: any) => x.isPrimary)?.imagePath
+                      }`}
+                      alt={`Product ${i + 1}`}
+                      fill
+                      className="object-cover object-top"
+                    />
+                  </div>
+                  <Link href={`/users/rentals/${items.id}`}>
+                    <div className="text-center">
+                      <button className="w-full bg-[#1a1b3f] hover:bg-[#2a2b4f] text-white text-sm py-2 rounded-sm">
+                        Book now
+                      </button>
+                    </div>
+                  </Link>
                 </div>
-
-                <div className="text-center">
-                  <button className="w-full bg-[#1a1b3f] hover:bg-[#2a2b4f] text-white text-sm py-2 rounded-sm">
-                    Book now
-                  </button>
-                </div>
-              </div>
-            ))}
+              ))}
           </div>
         </div>
       </section>

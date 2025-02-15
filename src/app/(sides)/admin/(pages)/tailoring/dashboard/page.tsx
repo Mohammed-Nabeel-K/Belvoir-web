@@ -12,7 +12,7 @@ import {
 import { useState } from "react";
 import Metricscard from "../../../components/ui/tailor-merics-card/metricscard";
 import NotificationDropdown from "../../../components/ui/tailor-notification/notificationDropdown";
-import Ordertable from "../../../components/ui/Tailor-order-table/ordertable";
+import Ordertable from "../../../components/ui/tailor-order-table/ordertable";
 
 
 

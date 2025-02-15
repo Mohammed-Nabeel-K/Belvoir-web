@@ -1,6 +1,8 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
+import { useForm } from "react-hook-form";
 import axiosInstance from "../../../../../../axios/axiosinstance/axiosInstance";
+import { toast } from "react-toastify";
 
 const AddressManager = ({
   selectedAddress,
@@ -12,19 +14,19 @@ const AddressManager = ({
   setloading,
 }) => {
   const [editingAddress, setEditingAddress] = useState(null);
-  const [newAddress, setNewAddress] = useState({
-    street: "",
-    city: "",
-    state: "",
-    postalCode: "",
-    buildingName: "",
-    contactName: "",
-    contactNumber: "",
-  });  const [isAdding, setIsAdding] = useState(false);
-  const [isaddingnew, setisaddingnew] = useState(false)
+  const [isAdding, setIsAdding] = useState(false);
+  const [isaddingnew, setisaddingnew] = useState(false);
+
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm();
+
   // Handle selecting an address
   const handleSelect = (data) => {
-    setSelectedAddress(data)
+    setSelectedAddress(data);
   };
 
   // Handle editing an address
@@ -33,65 +35,56 @@ const AddressManager = ({
     setIsAdding(true);
   };
 
-  
   // Handle saving edited address
-  const handleSaveEdit = async (id) => {
-    setloading(true);
-    await axiosInstance.put(
-      `/Address/${id}`,
-      {
-        street: editingAddress?.street,
-        city: editingAddress?.city,
-        state: editingAddress.state,
-        postalCode: editingAddress.postalCode,
-        buildingName: editingAddress.buildingName,
-        contactName: editingAddress.contactName,
-        contactNumber: editingAddress.contactNumber,
-      },
-      {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("userData")}`,
-        },
-      }
-    );
-    FetchAdddress();
-    setaddress(data);
-    setIsAdding(false);
-    setEditingAddress(null);
-  };
-
-  const handleAddNew = async () => {
+  const handleSaveEdit = async (updatedData) => {
     setloading(true);
     try {
-      await axiosInstance.post(
-        `/Address/Add`,
-        {
-          street: newAddress.street,
-          city: newAddress.city,
-          state: newAddress.state,
-          postalCode: newAddress.postalCode,
-          buildingName: newAddress.buildingName,
-          contactName: newAddress.contactName,
-          contactNumber: newAddress.contactNumber,
-        },
+      const response =await axiosInstance.put(
+        `/Address/${editingAddress.id}`,
+        updatedData,
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("userData")}`,
           },
         }
       );
-      
+      if(response.data.statusCode==200){
+        toast.success("Address edited successfully")
+      }else{
+        toast.error("issue in editing address")
+      }
       FetchAdddress();
       setaddress(data);
-      setNewAddress({
-        street: "",
-        city: "",
-        state: "",
-        postalCode: "",
-        buildingName: "",
-        contactName: "",
-        contactNumber: "",
-      });
+      setIsAdding(false);
+      setEditingAddress(null);
+    } catch (error) {
+      console.error("Error updating address:", error);
+    } finally {
+      setloading(false);
+    }
+  };
+
+  // Handle adding new address
+  const handleAddNew = async (newData) => {
+    setloading(true);
+    try {
+      const response =await axiosInstance.post(
+        `/Address/Add`,
+        newData,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("userData")}`,
+          },
+        }
+      );
+      if(response.data.statusCode==200){
+        toast.success("Address edited successfully")
+      }else{
+        toast.error("issue in editing address")
+      }
+      FetchAdddress();
+      setaddress(data);
+      reset();
       setisaddingnew(false);
     } catch (error) {
       console.error("Error adding new address:", error);
@@ -99,11 +92,10 @@ const AddressManager = ({
       setloading(false);
     }
   };
- 
-  
+
   return (
-    <div className="p-4 w-full mx-auto block m-auto mt-0">
-      <h2 className="text-xl font-bold mb-4">Manage Addresses</h2>
+    <div className="p-4 w-full mx-auto">
+      <h2 className="text-xl font-bold mb-4 text-[#0E0E25]">Manage Addresses</h2>
 
       {/* Address List */}
       {data?.map((addr) => (
@@ -111,7 +103,7 @@ const AddressManager = ({
           key={addr.id}
           className={`border p-3 rounded-md mb-3 ${
             selectedAddress?.id === addr.id
-              ? "border-blue-500 border-[4px]"
+              ? "border-[#0E0E25] border-[4px]"
               : "border-gray-300"
           }`}
         >
@@ -123,14 +115,14 @@ const AddressManager = ({
             </div>
             <div className="flex gap-2">
               <button
-                onClick={() => handleSelect({...addr})}
-                className="px-3 py-1 text-sm bg-blue-500 text-white rounded-md cursor-pointer"
+                onClick={() => handleSelect({ ...addr })}
+                className="px-3 py-1 text-sm bg-[#0E0E25] text-white rounded-md"
               >
                 Select
               </button>
               <button
                 onClick={() => handleEdit({ ...addr })}
-                className="px-3 py-1 text-sm bg-yellow-500 text-white rounded-md cursor-pointer"
+                className="px-3 py-1 text-sm bg-[#004d99] text-white rounded-md"
               >
                 Edit
               </button>
@@ -143,184 +135,191 @@ const AddressManager = ({
       {isAdding && (
         <div className="border p-4 rounded-md bg-gray-100">
           <h3 className="text-lg font-semibold mb-2">Edit Address</h3>
+          <form onSubmit={handleSubmit(handleSaveEdit)}>
+            <input
+              {...register("street", {
+                required: "Street is required",
+                maxLength: { value: 100, message: "Street name can't exceed 100 characters" },
+              })}
+              defaultValue={editingAddress?.street}
+              placeholder="Street"
+              className="w-full p-2 mb-2 border rounded"
+            />
+            {errors.street && <p className="text-red-500">{errors.street.message}</p>}
 
-          <input
-            type="text"
-            className="w-full p-2 mb-2 border rounded"
-            placeholder="Street"
-            value={editingAddress?.street || ""}
-            onChange={(e) =>
-              setEditingAddress({ ...editingAddress, street: e.target.value })
-            }
-          />
+            <input
+              {...register("city", {
+                required: "City is required",
+                maxLength: { value: 50, message: "City name can't exceed 50 characters" },
+              })}
+              defaultValue={editingAddress?.city}
+              placeholder="City"
+              className="w-full p-2 mb-2 border rounded"
+            />
+            {errors.city && <p className="text-red-500">{errors.city.message}</p>}
 
-          <input
-            type="text"
-            className="w-full p-2 mb-2 border rounded"
-            placeholder="City"
-            value={editingAddress?.city || ""}
-            onChange={(e) =>
-              setEditingAddress({ ...editingAddress, city: e.target.value })
-            }
-          />
+            <input
+              {...register("state", {
+                required: "State is required",
+                maxLength: { value: 50, message: "State name can't exceed 50 characters" },
+              })}
+              defaultValue={editingAddress?.state}
+              placeholder="State"
+              className="w-full p-2 mb-2 border rounded"
+            />
+            {errors.state && <p className="text-red-500">{errors.state.message}</p>}
 
-          <input
-            type="text"
-            className="w-full p-2 mb-2 border rounded"
-            placeholder="State"
-            value={editingAddress?.state || ""}
-            onChange={(e) =>
-              setEditingAddress({ ...editingAddress, state: e.target.value })
-            }
-          />
+            <input
+              {...register("postalCode", {
+                required: "Postal Code is required",
+                pattern: {
+                  value: /^\d{6}$/,
+                  message: "Postal Code must be exactly 6 digits",
+                },
+              })}
+              defaultValue={editingAddress?.postalCode}
+              placeholder="Postal Code"
+              className="w-full p-2 mb-2 border rounded"
+            />
+            {errors.postalCode && <p className="text-red-500">{errors.postalCode.message}</p>}
 
-          <input
-            type="text"
-            className="w-full p-2 mb-2 border rounded"
-            placeholder="Postal Code"
-            value={editingAddress?.postalCode || " "}
-            onChange={(e) =>
-              setEditingAddress({
-                ...editingAddress,
-                postalCode: e.target.value,
-              })
-            }
-          />
+            <input
+              {...register("buildingName", {
+                maxLength: { value: 100, message: "Building name can't exceed 100 characters" },
+              })}
+              defaultValue={editingAddress?.buildingName}
+              placeholder="Building Name"
+              className="w-full p-2 mb-2 border rounded"
+            />
+            {errors.buildingName && <p className="text-red-500">{errors.buildingName.message}</p>}
 
-          <input
-            type="text"
-            className="w-full p-2 mb-2 border rounded"
-            placeholder="Building Name"
-            value={editingAddress?.buildingName || ""}
-            onChange={(e) =>
-              setEditingAddress({
-                ...editingAddress,
-                buildingName: e.target.value,
-              })
-            }
-          />
+            <input
+              {...register("contactName", {
+                required: "Contact Name is required",
+                maxLength: { value: 50, message: "Contact name can't exceed 50 characters" },
+              })}
+              defaultValue={editingAddress?.contactName}
+              placeholder="Contact Name"
+              className="w-full p-2 mb-2 border rounded"
+            />
+            {errors.contactName && <p className="text-red-500">{errors.contactName.message}</p>}
 
-          <input
-            type="text"
-            className="w-full p-2 mb-2 border rounded"
-            placeholder="Contact Name"
-            value={editingAddress?.contactName || ""}
-            onChange={(e) =>
-              setEditingAddress({
-                ...editingAddress,
-                contactName: e.target.value,
-              })
-            }
-          />
+            <input
+              {...register("contactNumber", {
+                required: "Contact Number is required",
+                pattern: {
+                  value: /^\+?[1-9]\d{9,14}$/,
+                  message: "Invalid contact number format",
+                },
+              })}
+              defaultValue={editingAddress?.contactNumber}
+              placeholder="Contact Number"
+              className="w-full p-2 mb-2 border rounded"
+            />
+            {errors.contactNumber && <p className="text-red-500">{errors.contactNumber.message}</p>}
 
-          <input
-            type="text"
-            className="w-full p-2 mb-2 border rounded"
-            placeholder="Contact Number"
-            value={editingAddress?.contactNumber || ""}
-            onChange={(e) =>
-              setEditingAddress({
-                ...editingAddress,
-                contactNumber: e.target.value,
-              })
-            }
-          />
-
-          <button
-            onClick={() => handleSaveEdit(editingAddress.id)}
-            className="px-4 py-2 bg-green-500 text-white rounded-md"
-          >
-            Save
-          </button>
+            <button type="submit" className="px-4 py-2 bg-green-500 text-white rounded-md">
+              Save
+            </button>
+          </form>
         </div>
       )}
-   
+
       {/* New Address Form */}
       {isaddingnew ? (
         <div className="border p-4 rounded-md bg-gray-100 mt-3">
           <h3 className="text-lg font-semibold mb-2">New Address</h3>
+          <form onSubmit={handleSubmit(handleAddNew)}>
+            <input
+              {...register("street", {
+                required: "Street is required",
+                maxLength: { value: 100, message: "Street name can't exceed 100 characters" },
+              })}
+              placeholder="Street"
+              className="w-full p-2 mb-2 border rounded"
+            />
+            {errors.street && <p className="text-red-500">{errors.street.message}</p>}
 
-          <input
-            type="text"
-            className="w-full p-2 mb-2 border rounded"
-            placeholder="Street"
-            onChange={(e) =>
-              setNewAddress({ ...newAddress, street: e.target.value })
-            }
-          />
+            <input
+              {...register("city", {
+                required: "City is required",
+                maxLength: { value: 50, message: "City name can't exceed 50 characters" },
+              })}
+              placeholder="City"
+              className="w-full p-2 mb-2 border rounded"
+            />
+            {errors.city && <p className="text-red-500">{errors.city.message}</p>}
 
-          <input
-            type="text"
-            className="w-full p-2 mb-2 border rounded"
-            placeholder="City"
-            onChange={(e) =>
-              setNewAddress({ ...newAddress, city: e.target.value })
-            }
-          />
+            <input
+              {...register("state", {
+                required: "State is required",
+                maxLength: { value: 50, message: "State name can't exceed 50 characters" },
+              })}
+              placeholder="State"
+              className="w-full p-2 mb-2 border rounded"
+            />
+            {errors.state && <p className="text-red-500">{errors.state.message}</p>}
 
-          <input
-            type="text"
-            className="w-full p-2 mb-2 border rounded"
-            placeholder="State"
-            onChange={(e) =>
-              setNewAddress({ ...newAddress, state: e.target.value })
-            }
-          />
+            <input
+              {...register("postalCode", {
+                required: "Postal Code is required",
+                pattern: {
+                  value: /^\d{6}$/,
+                  message: "Postal Code must be exactly 6 digits",
+                },
+              })}
+              placeholder="Postal Code"
+              className="w-full p-2 mb-2 border rounded"
+            />
+            {errors.postalCode && <p className="text-red-500">{errors.postalCode.message}</p>}
 
-          <input
-            type="text"
-            className="w-full p-2 mb-2 border rounded"
-            placeholder="Postal Code"
-            onChange={(e) =>
-              setNewAddress({ ...newAddress, postalCode: e.target.value })
-            }
-          />
+            <input
+              {...register("buildingName", {
+                maxLength: { value: 100, message: "Building name can't exceed 100 characters" },
+              })}
+              placeholder="Building Name"
+              className="w-full p-2 mb-2 border rounded"
+            />
+            {errors.buildingName && <p className="text-red-500">{errors.buildingName.message}</p>}
 
-          <input
-            type="text"
-            className="w-full p-2 mb-2 border rounded"
-            placeholder="Building Name"
-            onChange={(e) =>
-              setNewAddress({ ...newAddress, buildingName: e.target.value })
-            }
-          />
+            <input
+              {...register("contactName", {
+                required: "Contact Name is required",
+                maxLength: { value: 50, message: "Contact name can't exceed 50 characters" },
+              })}
+              placeholder="Contact Name"
+              className="w-full p-2 mb-2 border rounded"
+            />
+            {errors.contactName && <p className="text-red-500">{errors.contactName.message}</p>}
 
-          <input
-            type="text"
-            className="w-full p-2 mb-2 border rounded"
-            placeholder="Contact Name"
-            onChange={(e) =>
-              setNewAddress({ ...newAddress, contactName: e.target.value })
-            }
-          />
+            <input
+              {...register("contactNumber", {
+                required: "Contact Number is required",
+                pattern: {
+                  value: /^\+?[1-9]\d{9,14}$/,
+                  message: "Invalid contact number format",
+                },
+              })}
+              placeholder="Contact Number"
+              className="w-full p-2 mb-2 border rounded"
+            />
+            {errors.contactNumber && <p className="text-red-500">{errors.contactNumber.message}</p>}
 
-          <input
-            type="text"
-            className="w-full p-2 mb-2 border rounded"
-            placeholder="Contact Number"
-            onChange={(e) =>
-              setNewAddress({ ...newAddress, contactNumber: e.target.value })
-            }
-          />
-
-          <button
-            onClick={()=>handleAddNew()}
-            className="px-4 py-2 bg-green-500 text-white rounded-md mr-2"
-          >
-            Save
-          </button>
-
-          <button
-            onClick={() => setisaddingnew(false)}
-            className="px-4 py-2 bg-gray-400 text-white rounded-md"
-          >
-            Cancel
-          </button>
+            <button type="submit" className="px-4 py-2 bg-green-500 text-white rounded-md">
+              Save
+            </button>
+            <button
+              onClick={() => setisaddingnew(false)}
+              className="px-4 py-2 bg-gray-400 text-white rounded-md ml-2"
+            >
+              Cancel
+            </button>
+          </form>
         </div>
       ) : (
         <button
           onClick={() => setisaddingnew(true)}
-          className="w-full p-2 bg-blue-600 text-white rounded-md mt-3"
+          className="w-full p-2 bg-[#0E0E25] text-white rounded-md mt-3"
         >
           + Add New
         </button>

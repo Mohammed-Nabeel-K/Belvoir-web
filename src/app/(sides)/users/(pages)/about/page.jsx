@@ -85,7 +85,7 @@ const About = () => {
         </div>
 
         {/* Contact Form */}
-        <div className="mt-16">
+        <div className="mt-16" id="contact">
           <h2 className="text-2xl font-semibold text-center">Contact Us</h2>
           <form
             onSubmit={handleSubmit}

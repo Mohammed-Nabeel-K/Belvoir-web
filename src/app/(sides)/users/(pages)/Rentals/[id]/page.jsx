@@ -7,13 +7,18 @@ import Link from "next/link";
 import RatingCard from "../../../components/Rentals/RatingCard";
 import { useContext, useEffect, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCaretLeft, faCaretRight, faHeart } from "@fortawesome/free-solid-svg-icons";
+import {
+  faCaretLeft,
+  faCaretRight,
+  faHeart,
+  faStar,
+} from "@fortawesome/free-solid-svg-icons";
 import Loadercustom from "../../../components/ui/Loader";
 import Image from "next/image";
 import Navbar from "../../../components/ui/navbar/Navbar";
 import LoaderCustom from "../../../components/ui/Loader";
-import { OrderContext } from "@/app/Provider/OrderProvider";
 import { useRouter } from "next/navigation";
+import { toast } from "react-toastify";
 export default function RentalDetail() {
   const router = useRouter();
   const params = useParams();
@@ -32,11 +37,13 @@ export default function RentalDetail() {
     fabrictype: "",
   });
   const [quantity, setQuantity] = useState(1);
-
+  const [userRating, setUserRating] = useState(0);
+  const [reviewMessage, setReviewMessage] = useState("");
   const [ratingloading, setratingloading] = useState(false);
-
-  const { order, setOrder, selectedproduct, setselectedproduct } =
-    useContext(OrderContext);
+  const [stars, setstars] = useState({
+    fullstar: "",
+    halfstar: "",
+  });
 
   useEffect(() => {
     const fetchData = async () => {
@@ -55,14 +62,13 @@ export default function RentalDetail() {
             Authorization: `Bearer ${localStorage.getItem("userData")}`,
           },
         });
-        if (handlmore) {
-          var temp = ratingres.data.data.slice(0, 5);
-          setrating(temp);
-          setratingloading(false);
-        } else {
-          setrating(ratingres.data.data);
-          setratingloading(false);
-        }
+
+        setrating(ratingres.data.data);
+        const fullStars = Math.floor(rating.averageRating);
+        const halfStar = rating.averageRating % 1 >= 0.5 ? 1 : 0;
+        setstars({ fullstar: fullStars, halfstar: halfStar });
+        setratingloading(false);
+
         const similiarProductresponse = await axiosInstance.get(
           `/Rental/products`,
           {
@@ -92,37 +98,66 @@ export default function RentalDetail() {
   if (loading) return <Loadercustom></Loadercustom>;
   if (cloth == null) return notFound();
 
-  const handlePlaceOrder = (cloth) => {
-    const orderData = {
-      totalAmount: cloth.price,
-      paymentMethod: "Cash on Delivery",
-      shippingAddress: "User's Address",
-      shippingMethod: "Standard",
-      shippingCost: 50,
-      trackingNumber: "12345",
-      productType: "rental",
-      rentalProductId: cloth.id,
-      quantity: 1,
-      price: cloth.price,
-    };
+  const handleRatingSubmit = async () => {
+    if (userRating === 0 || reviewMessage.trim() === "") {
+      toast.error("Please select a rating and enter a review message.");
+      return;
+    }
+    try {
+      await axiosInstance.post(
+        "/Rental/rental-rating",
+        {
+           message: userRating,
+           ratingvalue: reviewMessage
+        },
+        {
+          params: {
+            productid: id,
+          },
 
-    setOrder(orderData);
-    let selectedProducts =
-      JSON.parse(localStorage.getItem("selectedProduct")) || [];
-
-    selectedProducts.push(cloth);
-
-    localStorage.setItem("selectedProduct", JSON.stringify(selectedProducts));
-    router.push("/users/checkout");
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("userData")}`,
+          },
+        }
+      );
+      toast.success("Review submitted successfully!");
+      setUserRating(0);
+      setReviewMessage("");
+    } catch (error) {
+      toast.error("Failed to submit review. Please try again.");
+      if (error.response.status == 401) {
+        toast.error("please login");
+        router.push("/login");
+      }
+    }
   };
 
-  const handleIncrement = () => {
-    setQuantity(quantity + 1);
-  };
+  const addToCart = async (item) => {
+    const token = localStorage.getItem("userData");
 
-  const handleDecrement = () => {
-    if (quantity > 1) {
-      setQuantity(quantity - 1);
+    try {
+      const response = await axiosInstance.post(
+        "/RentalCart/AddToCart",
+        {
+          productId: item.id,
+          quantity: 1,
+        },
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+      if (response.status == 200) {
+        toast.success("item added to cart successfully");
+        router.push("/users/cart");
+      }
+
+      return response.data;
+    } catch (error) {
+      if (error.response.status == 401) {
+        toast.error("please login");
+        router.push("/login");
+      }
+      console.error("cart", error);
     }
   };
   return (
@@ -168,21 +203,23 @@ export default function RentalDetail() {
               </div>
               {/* Buttons */}
               <div className="mt-6 font-sans flex justify-between">
+                {/* <Link href={"/users/cart"}>
+                  <button className="bg-violet-950 text-white px-6 py-2 rounded-full mr-4 hover:bg-zinc-600">
+                    Checkout in cart
+                  </button>
+                </Link> */}
+
                 <button
-                  className="bg-violet-950 text-white px-6 py-2 rounded-full mr-4 hover:bg-zinc-600"
-                  onClick={() => handlePlaceOrder({ ...cloth })}
+                  className="bg-yellow-600 text-white px-6 py-2 rounded-full hover:bg-yellow-700"
+                  onClick={() => addToCart(cloth.id)}
                 >
-                  Place an order
-                </button>
-                
-                <button className="bg-yellow-600 text-white px-6 py-2 rounded-full hover:bg-yellow-700">
                   Add to cart
                 </button>
-                <div className="p-2 border-[2px] border-black rounded-l-2xl">
+                {/* <div className="p-2 border-[2px] border-black rounded-l-2xl">
                   <button onClick={()=>handleDecrement()}><FontAwesomeIcon icon={faCaretLeft} className="size-5 cursor-pointer"/></button>
                   {quantity}
                   <button onClick={()=>handleIncrement()}><FontAwesomeIcon icon={faCaretRight} className="size-5 cursor-pointer"/></button>
-                </div>
+                </div> */}
               </div>
             </div>
           </div>
@@ -191,46 +228,99 @@ export default function RentalDetail() {
           <div className="mt-6">
             <h3 className="text-lg font-semibold">Customer Ratings</h3>
             <div className="flex items-center gap-2 mt-2">
-              <span className="text-2xl font-bold">4.5</span>
+              <span className="text-2xl font-bold">
+                {rating?.averageRating}
+              </span>
               <div className="flex">
-                {[...Array(5)].map((_, i) => (
+                {/* Render full stars */}
+                {rating?.averageRating != 0 &&
+                  [...Array(stars?.fullstar)].map((_, i) => (
+                    <svg
+                      key={`full-${i}`}
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 24 24"
+                      fill="#FFD700"
+                      className="w-6 h-6"
+                    >
+                      <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
+                    </svg>
+                  ))}
+
+                {/* Render half star */}
+                {stars?.halfstar === 1 && (
                   <svg
-                    key={i}
                     xmlns="http://www.w3.org/2000/svg"
                     viewBox="0 0 24 24"
-                    fill={i < 4.5 ? "#FFD700" : "#D1D5DB"}
+                    fill="#FFD700"
                     className="w-6 h-6"
                   >
                     <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
                   </svg>
+                )}
+              </div>
+              <span className="text-gray-600">({rating?.count} reviews)</span>
+            </div>
+            {/* add Rating */}
+            <div className="mt-6 p-6 rounded-lg ">
+              <h3 className="text-lg ">Leave a Review</h3>
+              <div className="flex items-center mt-2">
+                {[1, 2, 3, 4, 5].map((star) => (
+                  <FontAwesomeIcon
+                    key={star}
+                    icon={faStar}
+                    className={`text-2xl cursor-pointer mx-1 ${
+                      userRating >= star ? "text-yellow-500" : "text-gray-300"
+                    }`}
+                    onClick={() => setUserRating(star)}
+                  />
                 ))}
               </div>
-              <span className="text-gray-600">(250 reviews)</span>
+              <textarea
+                className="w-full mt-3 p-2 border rounded-lg"
+                rows="3"
+                placeholder="Write your review..."
+                value={reviewMessage}
+                onChange={(e) => setReviewMessage(e.target.value)}
+              ></textarea>
+              <button
+                className="mt-3 bg-[#0E0E25] text-white px-4 py-2 rounded-lg "
+                onClick={handleRatingSubmit}
+              >
+                Submit Review
+              </button>
             </div>
 
-            {/* Reviews Section */}
             <div className="mt-4">
               <h4 className="text-md font-medium">Rating Review</h4>
               <div className="grid gap-2 lg:grid-cols-3 sm:grid-cols-12 relative">
                 {rating ? (
-                  rating.map((x, i) => (
-                    <RatingCard key={i} data={x}></RatingCard>
-                  ))
+                  handlmore ? (
+                    rating?.ratings
+                      .slice(0, 3)
+                      .map((x, i) => <RatingCard key={i} data={x} />)
+                  ) : (
+                    rating?.ratings.map((x, i) => (
+                      <RatingCard key={i} data={x} />
+                    ))
+                  )
                 ) : (
-                  <div className="text-gray-500 ">No Reviews Yet..</div>
+                  <div className="text-gray-500">No Reviews Yet..</div>
                 )}
               </div>
+
               <div className="flex justify-between mt-4">
                 {ratingloading && <p className="text-gray-500">Loading...</p>}
-                <button
-                  className="p-3 rounded-[20px] bg-[#0F172A] my-4 w-max text-white text-[12px] block m-auto"
-                  onClick={() => {
-                    sethandlmore(!handlmore);
-                    setratingloading(true);
-                  }}
-                >
-                  {handlmore ? "View more" : "View less"}
-                </button>
+                {rating && rating.Length > 3 && (
+                  <button
+                    className="p-3 rounded-[20px] bg-[#0F172A] my-4 w-max text-white text-[12px] block m-auto"
+                    onClick={() => {
+                      sethandlmore(!handlmore);
+                      setratingloading(true);
+                    }}
+                  >
+                    {handlmore ? "View more" : "View less"}
+                  </button>
+                )}
               </div>
             </div>
           </div>
