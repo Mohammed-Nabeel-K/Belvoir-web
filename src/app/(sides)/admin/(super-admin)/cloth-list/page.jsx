@@ -1,13 +1,14 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   useAddClothes,
   useDeleteClothes,
   useEditClothes,
   useFetchAllClothes,
-  useFetchClothesAdmin,
+
 } from "../../../../../hooks/clothesHook";
 import { toast, ToastContainer } from "react-toastify";
+import axiosInstance from "../../../../../../axios/axiosinstance/axiosInstance";
 
 const ClothList = () => {
   const [searchQuery, setSearchQuery] = useState("");
@@ -16,7 +17,7 @@ const ClothList = () => {
   const [selectedCloth, setSelectedCloth] = useState(null);
   const [isAddModalOpen, setAddModalOpen] = useState(false);
   const [formErrors, setFormErrors] = useState({});
-  
+
   const [newCloth, setNewCloth] = useState({
     title: "",
     Description: "",
@@ -26,9 +27,6 @@ const ClothList = () => {
     DesignType: "",
     file: null,
   });
-  
-
-  
 
   const [imagePreview, setImagePreview] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
@@ -37,8 +35,7 @@ const ClothList = () => {
     setSearchQuery(e.target.value);
   };
 
-  const { data, refetch } = useFetchClothesAdmin(searchQuery, page, limit);
-  console.log(data)
+
   const { mutate: addClothes } = useAddClothes();
   const { mutate: deleteClothes } = useDeleteClothes();
   const { mutate: editClothes } = useEditClothes();
@@ -47,11 +44,13 @@ const ClothList = () => {
     const errors = {};
     if (!newCloth.Title) errors.Title = "Title is required.";
     if (!newCloth.Description) errors.Description = "Description is required.";
-    if (!newCloth.MaterialType) errors.MaterialType = "Material Type is required.";
+    if (!newCloth.MaterialType)
+      errors.MaterialType = "Material Type is required.";
     if (!newCloth.Color) errors.Color = "Color is required.";
 
     if (!newCloth.DesignType) errors.DesignType = "Design Type is required.";
-    if (!newCloth.Price || isNaN(newCloth.Price)) errors.Price = "Valid price is required.";
+    if (!newCloth.Price || isNaN(newCloth.Price))
+      errors.Price = "Valid price is required.";
     if (!newCloth.file && !isEditing) errors.file = "Image file is required.";
     setFormErrors(errors);
     return Object.keys(errors).length === 0;
@@ -79,20 +78,18 @@ const ClothList = () => {
 
     if (newCloth.file) formData.append("file", newCloth.file);
 
-
     if (isEditing) {
       editClothes(
-        { id: selectedCloth.id,formData: formData },
+        { id: selectedCloth.id, formData: formData },
         {
           onSuccess: () => {
             setAddModalOpen(false);
             setNewCloth({
-             
               Title: "",
               Description: "",
               Price: "",
               MaterialType: "",
-              Color:"",
+              Color: "",
               DesignPattern: "",
               file: null,
             });
@@ -111,13 +108,11 @@ const ClothList = () => {
         onSuccess: () => {
           setAddModalOpen(false);
           setNewCloth({
-            
-            
             Title: "",
             Description: "",
             Price: "",
             MaterialType: "",
-            Color:"",
+            Color: "",
             DesignType: "",
             file: null,
           });
@@ -138,7 +133,6 @@ const ClothList = () => {
       [name]: value || "",
     }));
   };
-  
 
   const handleEditClick = (cloth) => {
     setNewCloth({
@@ -146,7 +140,7 @@ const ClothList = () => {
       Title: cloth.title,
       Description: cloth.description,
       MaterialType: cloth.MaterialType,
-      Color:cloth.Color,
+      Color: cloth.Color,
       DesignType: cloth.designType,
       Price: cloth.price,
     });
@@ -154,9 +148,23 @@ const ClothList = () => {
     setSelectedCloth(cloth);
     setAddModalOpen(true);
     setIsEditing(true);
-    
   };
+
+  const [data, setdata] = useState();
+  useEffect(() => {
+    const fetchdata = async () => {
+      try {
+        const response = await axiosInstance.get(
+          `/Clothes/get?SearchTerm=${searchQuery}&PageNo=${page}&PageSize=${limit}`
+        );
+        setdata(response.data.data);
+      } catch (error) {
+        console.log("error in fetching cloth list",error);
   
+      }
+    };
+    fetchdata();
+  }, []);
 
   return (
     <div className="min-h-screen p-6 bg-gray-100">
@@ -183,7 +191,7 @@ const ClothList = () => {
                 Title: "",
                 Description: "",
                 MaterialType: "",
-                Color:"",
+                Color: "",
                 DesignType: "",
                 Price: "",
               });
@@ -202,7 +210,7 @@ const ClothList = () => {
                 <th className="px-6 py-3 text-left">Cloth ID</th>
                 <th className="px-6 py-3 text-left">Name</th>
                 <th className="px-6 py-3 text-left">Image</th>
-             
+
                 <th className="px-6 py-3 text-left">Price</th>
                 <th className="px-6 py-3 text-left">Material</th>
                 <th className="px-6 py-3 text-center">Edit</th>
@@ -210,13 +218,13 @@ const ClothList = () => {
               </tr>
             </thead>
             <tbody className="text-gray-700">
-              {data?.data?.map((cloth, index) => (
+              {data?.map((cloth, index) => (
                 <tr
                   key={cloth.id}
                   className={`border-b ${
                     index % 2 === 0 ? "bg-gray-50" : "bg-white"
                   }`}
-                  onClick={()=>setSelectedCloth(cloth)}
+                  onClick={() => setSelectedCloth(cloth)}
                 >
                   <td className="px-6 py-3">{cloth.id}</td>
                   <td className="px-6 py-3">{cloth.title}</td>
@@ -227,7 +235,7 @@ const ClothList = () => {
                       className="w-16 h-16 object-cover rounded-lg shadow-md"
                     />
                   </td>
-                 
+
                   <td className="px-6 py-3">{cloth.price}</td>
                   <td className="px-6 py-3">{cloth.materialType}</td>
                   <td className="px-6 py-3 text-center">
@@ -265,9 +273,7 @@ const ClothList = () => {
             </tbody>
           </table>
         </div>
-        
 
-        
         {isAddModalOpen && (
           <div className="fixed inset-0 flex items-center justify-center overflow-auto bg-black bg-opacity-50 z-50">
             <div className="bg-white rounded-xl  shadow-sm w-[700px] max-w-lg p-6">
@@ -276,49 +282,56 @@ const ClothList = () => {
               </h2>
               <form onSubmit={handleAddClothSubmit}>
                 <div className="space-y-4">
-                  
-                  {["Title", "Description", "Price","Material type", "Design type","color" ].map(
-                    (field) => (
-                      <div key={field}>
-                        <label className="block text-gray-700 font-medium capitalize">
-                          {field}
-                        </label>
-                        <input
-                          type="text"
-                          name={field}
-                          value={newCloth[field]}
-                          onChange={handleAddInputChange}
-                          className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                          required
-                        />
-                        {formErrors[field] && (
-                          <p className="text-red-500 text-sm mt-1">
-                            {formErrors[field]}
-                          </p>
-                        )}
-                      </div>
-                    )
-                  )}
+                  {[
+                    "Title",
+                    "Description",
+                    "Price",
+                    "Material type",
+                    "Design type",
+                    "color",
+                  ].map((field) => (
+                    <div key={field}>
+                      <label className="block text-gray-700 font-medium capitalize">
+                        {field}
+                      </label>
+                      <input
+                        type="text"
+                        name={field}
+                        value={newCloth[field]}
+                        onChange={handleAddInputChange}
+                        className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                        required
+                      />
+                      {formErrors[field] && (
+                        <p className="text-red-500 text-sm mt-1">
+                          {formErrors[field]}
+                        </p>
+                      )}
+                    </div>
+                  ))}
                   <div>
-                    <label className="block text-gray-700 font-medium">Image</label>
+                    <label className="block text-gray-700 font-medium">
+                      Image
+                    </label>
                     <input
                       type="file"
                       accept="image/*"
                       onChange={handleFileChange}
                       className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-600 hover:file:bg-blue-100"
                     />
-                    
                   </div>
                   {formErrors.file && (
-                      <p className="text-red-500 text-sm mt-1">{formErrors.file}</p>
-                    )}
-                    {imagePreview && (
-                      <img
-                        src={imagePreview}
-                        alt="Preview"
-                        className="w-full h-40 object-cover mt-4 rounded-lg"
-                      />
-                    )}
+                    <p className="text-red-500 text-sm mt-1">
+                      {formErrors.file}
+                    </p>
+                  )}
+                  {imagePreview && (
+                    <img
+                      src={imagePreview}
+                      alt="Preview"
+                      className="w-full h-40 object-cover mt-4 rounded-lg"
+                    />
+                  )}
                 </div>
                 <div className="mt-6 flex justify-end space-x-4">
                   <button
@@ -342,43 +355,43 @@ const ClothList = () => {
             </div>
           </div>
         )}
-        {selectedCloth && !isEditing ?(
-            <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-              <div className="bg-white rounded-xl shadow-sm w-1/3 p-6">
-                <h2 className="text-2xl font-bold text-gray-800 mb-4">
-                  Cloth Details
-                </h2>
-                <div className="space-y-2">
-                  <p>
-                    <strong>ID:</strong> {selectedCloth.id}
-                  </p>
-                  <p>
-                    <strong>Name:</strong> {selectedCloth.title}
-                  </p>
-                  <p>
-                    <strong>Description:</strong> {selectedCloth.description}
-                  </p>
-                  <p>
-                    <strong>Material:</strong> {selectedCloth.materialType}
-                  </p>
-                  <p>
-                    <strong>Design :</strong> {selectedCloth.designType}
-                  </p>
-                  <p>
-                    <strong>Price:</strong> {selectedCloth.price}
-                  </p>
-                </div>
-                <div className="mt-6 flex justify-end">
-                  <button
-                    onClick={()=>setSelectedCloth(null)}
-                    className="px-6 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-all duration-300"
-                  >
-                    Close
-                  </button>
-                </div>
+        {selectedCloth && !isEditing ? (
+          <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+            <div className="bg-white rounded-xl shadow-sm w-1/3 p-6">
+              <h2 className="text-2xl font-bold text-gray-800 mb-4">
+                Cloth Details
+              </h2>
+              <div className="space-y-2">
+                <p>
+                  <strong>ID:</strong> {selectedCloth.id}
+                </p>
+                <p>
+                  <strong>Name:</strong> {selectedCloth.title}
+                </p>
+                <p>
+                  <strong>Description:</strong> {selectedCloth.description}
+                </p>
+                <p>
+                  <strong>Material:</strong> {selectedCloth.materialType}
+                </p>
+                <p>
+                  <strong>Design :</strong> {selectedCloth.designType}
+                </p>
+                <p>
+                  <strong>Price:</strong> {selectedCloth.price}
+                </p>
+              </div>
+              <div className="mt-6 flex justify-end">
+                <button
+                  onClick={() => setSelectedCloth(null)}
+                  className="px-6 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-all duration-300"
+                >
+                  Close
+                </button>
               </div>
             </div>
-          ):null}
+          </div>
+        ) : null}
       </div>
     </div>
   );
