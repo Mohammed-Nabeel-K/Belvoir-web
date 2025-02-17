@@ -15,7 +15,7 @@ const Sidebar = () => {
   };
 
   return (
-    <div className="flex h-full  font-sans bg-[#F5F6FA] text-gray-800">
+    <div className="flex   font-sans bg-[#F5F6FA] text-gray-800">
       
       <div
         className={`fixed top-0 left-0 h-full w-64 p-6 bg-[#0E0E25] text-white transform ${
@@ -59,6 +59,13 @@ const Sidebar = () => {
               Laundry List
             </Link>
           </li> */}
+            <li className="flex items-center gap-3 hover:bg-gray-700 p-3 rounded-lg transition-all">
+            <FaClipboardList size={20} />
+            <Link href="/admin/order-list" className="flex-1">
+              Orders
+            </Link>
+          </li>
+
           <li className="flex items-center gap-3 hover:bg-gray-700 p-3 rounded-lg transition-all">
             <FaTruck size={20} />
             <Link href="/admin/deliveryboy-list" className="flex-1">
@@ -66,9 +73,6 @@ const Sidebar = () => {
             </Link>
           </li>
           
-         
-         
-         
           <li className="flex items-center gap-3 hover:bg-gray-700 p-3 rounded-lg transition-all">
             <FaShoppingCart size={20} />
             <Link href="/admin/cloth-list" className="flex-1">
@@ -87,19 +91,14 @@ const Sidebar = () => {
               Rental Products
             </Link>
           </li>
-          <li className="flex items-center gap-3 hover:bg-gray-700 p-3 rounded-lg transition-all">
-            <FaClipboardList size={20} />
-            <Link href="/admin/order-list" className="flex-1">
-              Orders
-            </Link>
-          </li>
+        
           
-          <li className="flex items-center gap-3 hover:bg-gray-700 p-3 rounded-lg transition-all">
+          {/* <li className="flex items-center gap-3 hover:bg-gray-700 p-3 rounded-lg transition-all">
             <FaEnvelope size={20} />
             <Link href="/admin/messages" className="flex-1">
               Feedback
             </Link>
-          </li>
+          </li> */}
           
         </ul>
       </div>

@@ -2,7 +2,6 @@
 import React from "react";
 
 const OrderDetails = () => {
-  // Dummy order data (Replace with API fetch)
   const order = {
     order_id: "bba1cbe5-def5-11ef-86df-32b126bedf2d",
     customerName: "John Doe",
@@ -11,7 +10,6 @@ const OrderDetails = () => {
     order_status: "Pending",
   };
 
-  // Format date
   const formatDate = (isoDate) => {
     return new Date(isoDate).toLocaleString("en-US", {
       year: "numeric",

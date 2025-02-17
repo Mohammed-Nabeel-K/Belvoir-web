@@ -130,6 +130,7 @@ const OrderSummary = ({ selectedAddress, setloading }) => {
           },
         });
         setdata(response.data.data);
+        
       } catch (error) {
         console.log("Error in fetching the cart in summary", error);
       } finally {

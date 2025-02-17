@@ -1,5 +1,3 @@
-
-
 "use client";
 import { useState, useEffect, use } from "react";
 import { notFound } from "next/navigation";
@@ -12,8 +10,8 @@ import { useRouter } from "next/navigation";
 import LoadingUi from "../../../components/ui/loading/loadingui";
 
 export default function ClothDetail({ params }) {
-  const { id } = use(params); // ✅ Unwrap params properly
-  const router=useRouter();
+  const { id } = use(params);
+  const router = useRouter();
 
   const [cloth, setCloth] = useState(null);
   const [rating, setRating] = useState([]);
@@ -34,20 +32,19 @@ export default function ClothDetail({ params }) {
         setRating(ratingRes.data.data);
       } catch (error) {
         console.error("Error fetching cloth details:", error);
-        notFound(); // Redirect to 404 if data is not found
+        notFound();
       }
     };
 
     fetchData();
-  }, [id]); // ✅ Fetch when `id` changes
+  }, [id]);
 
   const handleSelectCloth = () => {
     localStorage.setItem("selectedCloth", JSON.stringify(cloth));
     router.push("/users/Design");
   };
-  
 
-  if (!cloth) return <LoadingUi/>; // ✅ Prevents errors if cloth is not loaded
+  if (!cloth) return <LoadingUi />;
 
   return (
     <>
@@ -57,7 +54,6 @@ export default function ClothDetail({ params }) {
 
       <div className="container mx-auto mt-8 p-4">
         <div className="flex flex-col md:flex-row">
-          {/* Image */}
           <div className="md:w-1/2 flex justify-center md:justify-start">
             <img
               src={cloth.imageUrl}
@@ -66,19 +62,19 @@ export default function ClothDetail({ params }) {
             />
           </div>
 
-          {/* Details */}
           <div className="md:w-1/2 mt-6 md:mt-0 md:ml-6">
             <h1 className="text-3xl font-bold">{cloth.title}</h1>
             <p className="text-lg mt-4">{cloth.description}</p>
             <div className="text-xl font-bold mt-4">Price: ₹{cloth.price}</div>
 
-            {/* Buttons */}
             <div className="mt-6 font-sans">
-             
-                <button onClick={handleSelectCloth} className="bg-violet-950  text-white px-6 py-2 rounded-full mr-4 hover:bg-zinc-600">
-                  Select Design
-                </button>
-        
+              <button
+                onClick={handleSelectCloth}
+                className="bg-violet-950  text-white px-6 py-2 rounded-full mr-4 hover:bg-zinc-600"
+              >
+                Select Design
+              </button>
+
               <button className="bg-yellow-600 text-white px-6 py-2 rounded-full hover:bg-yellow-700">
                 Wishlist
               </button>
@@ -86,7 +82,6 @@ export default function ClothDetail({ params }) {
           </div>
         </div>
 
-        {/* Ratings */}
         <div className="mt-6">
           <h3 className="text-lg font-semibold">Customer Ratings</h3>
           <div className="flex items-center gap-2 mt-2">
@@ -107,47 +102,31 @@ export default function ClothDetail({ params }) {
             <span className="text-gray-600">(250 reviews)</span>
           </div>
 
-          {/* Reviews Section
           <div className="mt-4">
-            <h4 className="text-md font-medium">Rating Review</h4>
             <div className="grid gap-2 lg:grid-cols-3 sm:grid-cols-12">
               {rating.length > 0 ? (
-                rating.map((x, i) => <RatingCard key={i} data={x} />)
+                rating
+                  .slice(0, 6)
+                  .map((x, i) => <RatingCard key={i} data={x} />)
               ) : (
                 <div className="text-gray-500 ">No Reviews Yet..</div>
               )}
             </div>
-            <button className="p-3 rounded-[20px] bg-[#0F172A] my-4 w-max text-white text-[12px] block m-auto">
-              View More
-            </button>
-          </div> */}
-          {/* Reviews Section */}
-<div className="mt-4">
-  <div className="grid gap-2 lg:grid-cols-3 sm:grid-cols-12">
-    {rating.length > 0 ? (
-      rating.slice(0, 6).map((x, i) => <RatingCard key={i} data={x} />)
-    ) : (
-      <div className="text-gray-500 ">No Reviews Yet..</div>
-    )}
-  </div>
-  
-  {/* Show "View More" button only if there are more than 6 reviews */}
-  {rating.length > 6 && (
-    <button className="p-3 rounded-[20px] bg-[#0F172A] my-4 w-max text-white text-[12px] block m-auto">
-      View More
-    </button>
-  )}
-</div>
 
+            {rating.length > 6 && (
+              <button className="p-3 rounded-[20px] bg-[#0F172A] my-4 w-max text-white text-[12px] block m-auto">
+                View More
+              </button>
+            )}
+          </div>
         </div>
 
-        {/* Similar Products */}
         <div>
           <SimilarProducts materialType={cloth.materialType} id={cloth.id} />
         </div>
       </div>
 
-      <div className="mt-60"> 
+      <div className="mt-60">
         <Footer />
       </div>
     </>

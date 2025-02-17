@@ -35,12 +35,20 @@ export const fetchAllClothes = async ({
 
   
 export const fetchClothesforAdmin=async()=>{
-    const response=await axiosInstance.get(`/Clothes/get?SearchTerm=${search}&PageNo=${pageNo}&PageSize=${pageSize}`);
+    const response=await axiosInstance.get(`/Clothes/get?SearchTerm=${search}&PageNo=${pageNo}&PageSize=${pageSize}`,{
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("userData")}`, 
+      },
+    });
     return response.data
 }
 
 export const addClothes=async(values)=>{
-    const response=await axiosInstance.post("/Clothes/Add",values);
+    const response=await axiosInstance.post("/Clothes/Add",values,{
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("userData")}`, 
+      },
+    });
     return response.data
 }
 // export const editClothes=async(id,values)=>{
@@ -48,12 +56,20 @@ export const addClothes=async(values)=>{
 //     return response.data
 // }
 export const deleteClothes=async(id)=>{
-    const response=await axiosInstance.delete(`/Clothes/delete/${id}`);
+    const response=await axiosInstance.delete(`/Clothes/delete/${id}`,{
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("userData")}`, 
+      },
+    });
     return response.data
 }
 
 export const clothesfilterBy=async()=>{
-    const response=await axiosInstance.get("/Clothes/cloth-category");
+    const response=await axiosInstance.get("/Clothes/cloth-category",{
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("userData")}`, 
+      },
+    });
     return response.data
 }
 

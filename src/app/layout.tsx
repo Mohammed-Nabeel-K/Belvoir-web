@@ -1,6 +1,4 @@
-// app/layout.tsx
 import "../../styles/globals.css";
-// import "./globals.css";
 import 'animate.css';
 
 import Providers from "../app/Provider/Providers"

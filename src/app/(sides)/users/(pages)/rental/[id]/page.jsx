@@ -19,6 +19,7 @@ import Navbar from "../../../components/ui/navbar/Navbar";
 import LoaderCustom from "../../../components/ui/Loader";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
+import LoadingUi from "../../../components/ui/loading/loadingui";
 export default function RentalDetail() {
   const router = useRouter();
   const params = useParams();
@@ -95,7 +96,7 @@ export default function RentalDetail() {
     fetchData();
   }, [handlmore]);
 
-  if (loading) return <Loadercustom></Loadercustom>;
+  if (loading) return <LoadingUi/>
   if (cloth == null) return notFound();
 
   const handleRatingSubmit = async () => {
@@ -107,12 +108,12 @@ export default function RentalDetail() {
       const response=await axiosInstance.post(
         "/Rental/rental-rating",
         {
-          message: reviewMessage, // Correct message mapping
-          ratingvalue: userRating, // Correct rating value mapping
+          message: reviewMessage, 
+          ratingvalue: userRating, 
         },
         {
           params: {
-            productid: id, // Ensure product ID is passed in params correctly
+            productid: id, 
           },
           headers: {
             Authorization: `Bearer ${localStorage.getItem("userData")}`,
@@ -170,7 +171,6 @@ export default function RentalDetail() {
       {cloth && (
         <div className="container mx-auto mt-8 p-4 pb-[40px]">
           <div className="flex flex-col md:flex-row">
-            {/* Image on the left side */}
             <div className="md:w-1/2 flex flex-col justify-center md:justify-start">
               <img
                 src={activeimage && activeimage}
@@ -193,7 +193,6 @@ export default function RentalDetail() {
               </div>
             </div>
 
-            {/* Title, Price, Description, and Buttons on the right side */}
             <div className="md:w-1/2 mt-6 md:mt-0 md:ml-6">
               <h1 className="text-3xl font-bold">{cloth.title}</h1>
               <p className="text-lg mt-4">{cloth.description}</p>

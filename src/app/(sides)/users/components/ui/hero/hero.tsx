@@ -162,7 +162,7 @@ export default function Hero() {
                       className="object-cover object-top"
                     />
                   </div>
-                  <Link href={`/users/rentals/${items.id}`}>
+                  <Link href={`/users/rental/${items.id}`}>
                     <div className="text-center">
                       <button className="w-full bg-[#1a1b3f] hover:bg-[#2a2b4f] text-white text-sm py-2 rounded-sm">
                         Book now

@@ -4,7 +4,7 @@ import {
   useAddClothes,
   useDeleteClothes,
   useEditClothes,
-  useFetchAllClothes,
+  useFetchAllClothes,z
 
 } from "../../../../../hooks/clothesHook";
 import { toast, ToastContainer } from "react-toastify";
@@ -205,7 +205,7 @@ const ClothList = () => {
 
         <div className="overflow-x-auto">
           <table className="min-w-full bg-white border border-gray-200 rounded-lg shadow-sm">
-            <thead className="bg-black text-white text-sm uppercase tracking-wider">
+            <thead className=" text-black text-sm  tracking-wider">
               <tr>
                 <th className="px-6 py-3 text-left">Cloth ID</th>
                 <th className="px-6 py-3 text-left">Name</th>
@@ -217,7 +217,7 @@ const ClothList = () => {
                 <th className="px-6 py-3 text-center">Delete</th>
               </tr>
             </thead>
-            <tbody className="text-gray-700">
+            <tbody className="text-black">
               {data?.map((cloth, index) => (
                 <tr
                   key={cloth.id}
@@ -226,9 +226,9 @@ const ClothList = () => {
                   }`}
                   onClick={() => setSelectedCloth(cloth)}
                 >
-                  <td className="px-6 py-3">{cloth.id}</td>
-                  <td className="px-6 py-3">{cloth.title}</td>
-                  <td className="px-6 py-3">
+                  <td className="px-6 ">{cloth.id}</td>
+                  <td className="px-6 ">{cloth.title}</td>
+                  <td className="px-6 ">
                     <img
                       src={cloth.imageUrl}
                       alt={cloth.title}
@@ -255,7 +255,7 @@ const ClothList = () => {
                         e.stopPropagation();
                         deleteClothes(cloth.id, {
                           onSuccess: () => {
-                            toast.success("Cloth deleted successfully!");
+                            // toast.success("Cloth deleted successfully!");
                             refetch();
                           },
                           onError: () => {

@@ -1,7 +1,13 @@
 import Link from "next/link";
-
+import {useRouter} from "next/navigation"
 
 export default function Sidebar({ isOpen }) {
+  const router=useRouter();
+  const handleLogout =()=>{
+    localStorage.setItem("userData","");
+    router.push("/login")
+  }
+
   return (
     <div
       className={` fixed flex flex-col z-20 items-center justify-between w-[300px] bg-[#0E0E25] h-full text-white p-6 ${
@@ -27,7 +33,7 @@ export default function Sidebar({ isOpen }) {
         </Link>
       </div>
       <div className="w-full">
-        <button className="w-full rounded-md py-1 bg-slate-200 font-Libre text-xl font-medium text-[#0E0E25]">
+        <button className="w-full rounded-md py-1 bg-slate-200 font-Libre text-xl font-medium text-[#0E0E25]" onClick={()=>handleLogout()}>
           Logout
         </button>
       </div>

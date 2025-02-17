@@ -1,5 +1,6 @@
 "use client";
-
+import { useFormik } from "formik";
+import * as Yup from "yup";
 import React, { useState, useEffect } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -9,6 +10,7 @@ import {
   useDeleteDeleveryBoy,
   UsefetchAlldeleveryBoys,
 } from "../../../../../hooks/deleveryBoyHook";
+import LoadingUi from "../../../users/components/ui/loading/loadingui";
 
 const DeliveryBoyListPage = () => {
   const [searchQuery, setSearchQuery] = useState("");
@@ -76,28 +78,46 @@ const DeliveryBoyListPage = () => {
     setnewDeleveryBoy((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleAddDeleverySubmit = (e) => {
-    e.preventDefault();
-    addDeleveryBoy(newDeleveryBoy, {
-      onSuccess: () => {
-        toast.success("Delivery boy added successfully!");
-        setAddModalOpen(false);
-        setnewDeleveryBoy({
-          name: "",
-          passwordHash: "",
-          email: "",
-          phone: "",
-          licenceNo: "",
-          vehicleNo: "",
-        });
-        refetch();
-      },
-      onError: () => {
-        toast.error("Failed to add delivery boy.");
-      },
-    });
-  };
 
+  const formik = useFormik({
+    initialValues: {
+      name: "",
+      email: "",
+      password: "",
+      phone: "",
+      licenceNo: "",
+      vehicleNo: "",
+    },
+    validationSchema :Yup.object({
+      name: Yup.string().required("Name is required"),
+      email: Yup.string().email("Invalid email").required("Email is required"),
+      password: Yup.string()
+        .min(6, "Password must be at least 6 characters")
+        .matches(/[A-Za-z]/, "Password must contain at least one letter")
+        .matches(/[0-9]/, "Password must contain at least one number")
+        .required("Password is required"),
+      phone: Yup.string()
+        .matches(/^\d{10}$/, "Phone must be 10 digits")
+        .required("Phone is required"),
+      licenceNo: Yup.string().required("Licence number is required"),
+      vehicleNo: Yup.string()
+        .matches(/^[A-Z]{2}\d{2}[A-Z]{1,2}\d{4}$/, "Invalid vehicle number format (e.g., MH12AB1234)")
+        .required("Vehicle number is required"),
+    }),
+    onSubmit: (values) => {
+      addDeleveryBoy(values, {
+        onSuccess: () => {
+          toast.success("Delivery boy added successfully!");
+          setAddModalOpen(false);
+          formik.resetForm();
+          refetch();
+        },
+        onError: () => {
+          toast.error("Failed to add delivery boy.");
+        },
+      });
+    },
+  });
   const handleDelete = (id) => {
     deleteDeleveryBoy(id, {
       onSuccess: () => {
@@ -111,21 +131,14 @@ const DeliveryBoyListPage = () => {
   };
 
   return (
-    <div className="p-8 bg-gradient-to-r from-blue-50 to-indigo-100 min-h-screen">
+    <div className="p-8 bg- min-h-screen">
       <ToastContainer />
       <div className="max-w-7xl mx-auto">
        
 
         {isLoading ? (
           
-          <div className="flex justify-center items-center mt-[300px]">
-            <div className="load-row flex space-x-2">
-              <span className="w-4 h-4 bg-blue-700 rounded-full animate-bounce"></span>
-              <span className="w-4 h-4 bg-blue-400 rounded-full animate-bounce delay-150"></span>
-              <span className="w-4 h-4 bg-blue-300 rounded-full animate-bounce delay-300"></span>
-              <span className="w-4 h-4 bg-blue-200 rounded-full animate-bounce delay-450"></span>
-            </div>
-          </div>
+<LoadingUi/>
         ) : (
           <>
 
@@ -151,15 +164,15 @@ const DeliveryBoyListPage = () => {
             
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 mb-8">
-              <div className="bg-white p-6 rounded-xl shadow-sm text-center">
+              <div className="bg-white p-6 rounded-xl shadow-xl text-center">
                 <h3 className="text-xl font-bold text-gray-800">Total Delivery Boys</h3>
                 <p className="text-3xl font-semibold text-gray-900">{totalDeleveryBoys}</p>
               </div>
-              <div className="bg-white p-6 rounded-xl shadow-sm text-center">
+              <div className="bg-white p-6 rounded-xl shadow-xl text-center">
                 <h3 className="text-xl font-bold text-gray-800">Active</h3>
                 <p className="text-3xl font-semibold text-green-500">{active}</p>
               </div>
-              <div className="bg-white p-6 rounded-xl shadow-sm text-center">
+              <div className="bg-white p-6 rounded-xl shadow-xl text-center">
                 <h3 className="text-xl font-bold text-gray-800">Blocked</h3>
                 <p className="text-3xl font-semibold text-red-500">{blocked}</p>
               </div>
@@ -256,24 +269,23 @@ const DeliveryBoyListPage = () => {
           <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
             <div className="bg-white rounded-xl shadow-sm w-full max-w-lg p-6">
               <h2 className="text-2xl font-bold text-gray-800 mb-4">Add New Delivery Boy</h2>
-              <form onSubmit={handleAddDeleverySubmit}>
-                <div className="space-y-4">
-                  {Object.keys(newDeleveryBoy).map((field) => (
-                    <div key={field}>
-                      <label className="block text-gray-700 font-medium capitalize">
-                        {field}
-                      </label>
-                      <input
-                        type="text"
-                        name={field}
-                        value={newDeleveryBoy[field]}
-                        onChange={handleAddInputChange}
-                        className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                        required
-                      />
-                    </div>
-                  ))}
-                </div>
+              <form onSubmit={formik.handleSubmit}>
+                {Object.keys(formik.initialValues).map((field) => (
+                  <div key={field} className="mb-4">
+                    <label className="block text-gray-700 font-medium capitalize">{field}</label>
+                    <input
+                      type="text"
+                      name={field}
+                      value={formik.values[field]}
+                      onChange={formik.handleChange}
+                      onBlur={formik.handleBlur}
+                      className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                    />
+                    {formik.touched[field] && formik.errors[field] && (
+                      <p className="text-red-500 text-sm">{formik.errors[field]}</p>
+                    )}
+                  </div>
+                ))}
                 <div className="mt-6 flex justify-end space-x-4">
                   <button
                     type="button"
@@ -316,7 +328,7 @@ const DeliveryBoyListPage = () => {
               <div className="mt-6 flex justify-end">
                 <button
                   onClick={() => setSelected(null)}
-                  className="px-6 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-all duration-300"
+                  className="px-6 py-2 bg-black text-white rounded-lg hover:bg-gray-800 transition-all duration-300"
                 >
                   Close
                 </button>

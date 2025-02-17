@@ -3,63 +3,69 @@ import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import axiosInstance from "../../../../../../../axios/axiosinstance/axiosInstance";
 import Image from "next/image";
-import Profileui from '../../../(super-admin)/components/shimmerui/profileui'
-
-
-
-
+import Profileui from "../../../(super-admin)/components/shimmerui/profileui";
+import { toast } from "react-toastify";
+import { useRouter } from "next/navigation";
 const ProfilePage = () => {
-  const [status,setStatus] = useState('idle');
+  const router = useRouter();
+  const [status, setStatus] = useState("idle");
   const [showModal, setShowModal] = useState(false);
   const [deliverydata, setDeliveryData] = useState({});
+  const [passwords, setpasswords] = useState({
+    oldPassword: "",
+    newPassword: "",
+  });
+  const resetpassword = async () => {
+    try {
+      if (passwords.oldPassword.length < 8 || passwords.newPassword.length < 8) {
+        toast.error("password should contain atleast 8 character")
+        return
+      }
+      const response = await axiosInstance.post(`/resetpassword`, {
+        oldPassword: passwords?.oldPassword,
+        newPassword: passwords?.newPassword,
+      });
+      if(response.status==200){
+        toast.success("success")
+        setShowModal(false)
+      }
+      if(response.data.StatusCode==404){
+      toast.error("password doesnt match try again")
+      }
+    } catch (error) {
+      console.log("error in reset password in delivery",error);
+    }
+  };
 
-const fetchDeliveryProfile = async () => {
-
-  setStatus('loading');
-
-  try {
-    const token = localStorage.getItem("userData");
-
-    if (!token) {
-      console.error("no token found");
+  const fetchDeliveryProfile = async () => {
+    setStatus("loading");
+    try {
+      const token = localStorage.getItem("userData");
+      const response = await axiosInstance.get("/Delivery/profile-delivery ", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      setDeliveryData(response.data.data);
+    } catch (error) {
+      if (error.response.status == 401) {
+        toast.error("please login");
+        router.push("/login");
+      }
+      console.error("error", error);
     }
 
-console.log(token)
-
-    const response = await axiosInstance.get("/Delivery/profile-delivery ", {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-
-
-    setDeliveryData(response.data.data);
-
-    
-  } catch (error) {
-    
-    console.error("error", error);
-    
-  }
-
-  setStatus('success')
-
-};
-
-console.log(deliverydata);
+    setStatus("success");
+  };
 
   useEffect(() => {
     fetchDeliveryProfile();
   }, []);
 
   return (
-  
     <div className="w-full p-4 sm:p-6 lg:p-8 bg-gray-50">
-
       <div className="max-w-5xl mx-auto space-y-4">
-
         <div className="relative p-4 sm:p-6 bg-white rounded-lg shadow-sm">
-
           <div className="absolute right-4 top-4 px-3 py-1 text-sm bg-green-100 text-green-800 rounded">
             Delivery
           </div>
@@ -68,15 +74,10 @@ console.log(deliverydata);
             <Profileui />
           ) : (
             <div className="flex gap-5">
-              
               <div className="flex-shrink-0 w-32 h-32 sm:w-48 sm:h-48 mx-auto sm:mx-0">
-                <Image
-                  src="/home/nabeel.png"
-                  alt="tailor"
-                  width={1000}
-                  height={1000}
-                  className="w-full h-full object-cover rounded-lg border border-gray-200"
-                />
+                <div className="w-24 h-24 md:w-20 md:h-20 bg-gray-600 text-white text-4xl md:text-3xl font-bold flex items-center justify-center rounded-full">
+                {deliverydata?.name?.charAt(0) ?? ''}
+                </div>
               </div>
 
               <div className="flex flex-col space-y-4 text-center sm:text-left">
@@ -92,7 +93,6 @@ console.log(deliverydata);
                   <p className="text-gray-700">{deliverydata.experience}</p>
                 </div>
               </div>
-
             </div>
           )}
         </div>
@@ -100,7 +100,7 @@ console.log(deliverydata);
         <div className="bg-white rounded-lg shadow-sm overflow-hidden">
           <button
             onClick={() => setShowModal(!showModal)}
-            className="w-full p-4 text-left flex justify-between items-center hover:bg-gray-50 transition-colors"
+            className="w-full p-4 text-left flex justify-between items-center hover:bg-slate-800 hover:text-white transition-colors"
           >
             <span className="text-lg font-medium">Change Password</span>
           </button>
@@ -117,6 +117,7 @@ console.log(deliverydata);
                 <p className="text-gray-600 mt-1">View all Tasks</p>
               </div>
               <span className="text-2xl">📦</span>
+              
             </div>
           </div>
         </Link>
@@ -142,18 +143,16 @@ console.log(deliverydata);
                   type="password"
                   placeholder="Current Password"
                   className="w-full p-3 border rounded focus:outline-none focus:ring-1 focus:ring-gray-400"
-                />
+                  onChange={(e) => setpasswords({ ...passwords, oldPassword: e.target.value })}
+                  />
                 <input
                   type="password"
                   placeholder="New Password"
                   className="w-full p-3 border rounded focus:outline-none focus:ring-1 focus:ring-gray-400"
-                />
-                <input
-                  type="password"
-                  placeholder="Confirm New Password"
-                  className="w-full p-3 border rounded focus:outline-none focus:ring-1 focus:ring-gray-400"
-                />
-                <button className="w-full p-3 bg-black text-white rounded hover:bg-gray-800 transition-colors">
+                  onChange={(e) => setpasswords({ ...passwords, newPassword: e.target.value })}
+                  />
+
+                <button className="w-full p-3 bg-black text-white rounded hover:bg-gray-800 transition-colors" onClick={()=>resetpassword()}>
                   Update Password
                 </button>
               </div>
@@ -166,4 +165,3 @@ console.log(deliverydata);
 };
 
 export default ProfilePage;
-

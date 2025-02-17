@@ -18,7 +18,7 @@ const RentalProductList = () => {
     <div className="min-h-screen p-6 bg-gray-100">
       <div className="max-w-6xl mx-auto bg-white shadow-lg rounded-lg p-6 space-y-6">
   
-        <h1 className="text-3xl font-bold text-gray-700">Rental Product List</h1>
+        <h1 className="text-3xl font-bold text-gray-900">Rental Product List</h1>
 
       
         <div className="flex flex-wrap items-center justify-between gap-4">
@@ -28,7 +28,7 @@ const RentalProductList = () => {
               placeholder="Search for products..."
               value={searchQuery}
               onChange={handleSearch}
-              className="w-full p-3 pl-10 rounded-lg border border-gray-300 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full p-3 pl-10 rounded-full border border-gray-300 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
             <svg
               className="absolute top-3 left-3 w-6 h-6 text-gray-400"
@@ -53,7 +53,7 @@ const RentalProductList = () => {
         
         <div className="overflow-x-auto">
           <table className="min-w-full bg-white border border-gray-200 rounded-lg shadow-sm">
-            <thead className="bg-gray-200 text-gray-600 text-sm uppercase tracking-wider">
+            <thead className="  text-sm  tracking-wider">
               <tr>
                 <th className="px-6 py-3 text-left">Product ID</th>
                 <th className="px-6 py-3 text-left">Name</th>
@@ -64,7 +64,7 @@ const RentalProductList = () => {
                 <th className="px-6 py-3 text-center">Delete</th>
               </tr>
             </thead>
-            <tbody className="text-gray-700">
+            <tbody className="text-black">
               {products?.data?.map((product, index) => (
                 <tr
                   key={product.id}
@@ -76,8 +76,7 @@ const RentalProductList = () => {
                   <td className="px-6 py-3">{product.title}</td>
                   <td className="px-6 py-3">
                     <img
-                      src={product.image}
-                      alt={product.name}
+src={product.images.find(img => img.isPrimary)?.imagePath || design.images[0]?.imagePath}                      alt={product.name}
                       className="w-16 h-16 object-cover rounded-lg shadow-md"
                     />
                   </td>

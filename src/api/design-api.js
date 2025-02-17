@@ -16,13 +16,16 @@ export const fetchAlldesigns=async({
    
 })=>{
     const response =await axiosInstance.get(
-        `/Design?Name=${Name}&Category=${Category}&MinPrice=${MinPrice}&MaxPrice=${MaxPrice}&SortBy=${SortBy}&IsDescending=${IsDescending}&PageNo=${PageNo}&PageSize=${PageSize}`
-    );
+        `/Design?Name=${Name}&Category=${Category}&MinPrice=${MinPrice}&MaxPrice=${MaxPrice}&SortBy=${SortBy}&IsDescending=${IsDescending}&PageNo=${PageNo}&PageSize=${PageSize}`)
     return response.data;
 }
 
 export const getMeasurment=async(id)=>{
-    const response =await axiosInstance.get(`Design/get/mesurments/${id}`);
+    const response =await axiosInstance.get(`Design/get/mesurments/${id}`,{
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("userData")}`, 
+      },
+    });
     return response.data;
 
 }
@@ -44,7 +47,7 @@ export const saveMeasurement = async (values) => {
       values,
       {
         headers: {
-          Authorization: `Bearer ${localStorage.getItem("userData")}`, // Attach token in the request headers
+          Authorization: `Bearer ${localStorage.getItem("userData")}`, 
         },
       }
     );

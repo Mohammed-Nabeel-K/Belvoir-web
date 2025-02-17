@@ -19,7 +19,7 @@ function Container() {
   });
   const [Data, setData] = useState();
   const [hasMore, setHasMore] = useState(true);
-  const pageSize = 1;
+  const pageSize = 8;
 
   const { data, isLoading } = UsefetchAllRentalProducts(
     pagenumber,

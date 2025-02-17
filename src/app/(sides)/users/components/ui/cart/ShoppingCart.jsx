@@ -114,7 +114,7 @@ function ShoppingCart() {
                     <h3 className="font-medium text-sm line-clamp-1">
                       {item.productName}
                     </h3>
-                    <span className="text-indigo-600 text-sm">
+                    <span className="text-[#0E0E25] text-sm">
                       ${item.itemPrice}/day
                     </span>
                   </div>
@@ -132,7 +132,7 @@ function ShoppingCart() {
                         <Plus className="h-2 w-2" />
                       </button>
                     </div>
-                    <span className="font-medium text-indigo-600 text-sm">
+                    <span className="font-medium text-[#0E0E25] text-sm">
                       ${(item.itemPrice * item.quantity).toFixed(2)}
                     </span>
                   </div>
@@ -147,13 +147,13 @@ function ShoppingCart() {
               <div className="space-y-1">
                 <div className="text-xl font-bold">
                   Total Estimate:{" "}
-                  <span className="text-indigo-600">${total.toFixed(2)}</span>
+                  <span className="text-[#0E0E25]">${total.toFixed(2)}</span>
                 </div>
                 <p className="text-sm text-gray-500">
                   Includes all selected items
                 </p>
               </div>
-              <button className="bg-indigo-600 text-white px-8 py-3 rounded-lg hover:bg-indigo-700 transition" onClick={()=>handlcheckout()}>
+              <button className="bg-[#0E0E25] text-white px-8 py-3 rounded-lg hover:bg-indigo-700 transition" onClick={()=>handlcheckout()}>
                 Secure Checkout
               </button>
             </div>

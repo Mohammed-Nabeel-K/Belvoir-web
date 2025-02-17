@@ -36,10 +36,18 @@ const Login = () => {
       console.log("Login response:", response.data);
 
       localStorage.setItem("userData", response.data.data.accessToken);
-
+       if(response.data.data.role ==="Admin"){
+        router.push("/admin/dashboard")
+       }else if(response.data.data.role==="Tailor"){
+        router.push("/admin/tailoring/dashboard")
+       } else if(response.data.data.role==="Delivery"){
+        router.push("/admin/delivery/dashboard")
+       }else{
+        router.push("/")
+       }
       setStatus("succeeded");
 
-      router.push("/");
+     
 
     } catch (error) {
       setError(error.response?.data?.message || "Something went wrong");

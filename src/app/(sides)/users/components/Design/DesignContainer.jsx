@@ -28,8 +28,7 @@ const DesignContainer = () => {
     pageSize
   );
 
-  const fetchingRef = useRef(false); // Prevents multiple API calls
-
+  const fetchingRef = useRef(false); 
   useEffect(() => {
     if (data?.data) {
       if (pageNo === 1) {
@@ -38,23 +37,23 @@ const DesignContainer = () => {
         setFilteredData((prev) => [...prev, ...data.data]);
       }
 
-      setHasMore(data.data.length === pageSize); // Disable infinite scroll if less than pageSize
-      fetchingRef.current = false; // Mark fetching as done
+      setHasMore(data.data.length === pageSize); 
+      fetchingRef.current = false; 
     }
   }, [data, pageNo, pageSize]);
 
   useEffect(() => {
     setPageNo(1);
-    setHasMore(true); // Reset pagination on filter change
+    setHasMore(true); 
   }, [query, designType, minPrice, maxPrice, sort]);
 
   useEffect(() => {
     const handleScroll = () => {
-      if (fetchingRef.current || isLoading || !hasMore) return; // Prevent duplicate calls
+      if (fetchingRef.current || isLoading || !hasMore) return; 
 
       const { scrollTop, clientHeight, scrollHeight } = document.documentElement;
       if (scrollTop + clientHeight >= scrollHeight - 10) {
-        fetchingRef.current = true; // Mark fetching as in progress
+        fetchingRef.current = true; 
         setPageNo((prev) => prev + 1);
       }
     };
@@ -92,7 +91,6 @@ const DesignContainer = () => {
           </div>
         <Sidebar setSort={setSort} setMaxPrice={setMaxPrice} setMinPrice={setMinPrice} setDesignType={setDesignType} />
         </div>
-        {/* Main Content */}
         <div className="flex-1">
           <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-6 mt-10">
             {filteredData.length > 0 ? (
@@ -119,7 +117,7 @@ const DesignContainer = () => {
                 </div>
               ))
             ) : (
-              <div className="text-center col-span-full text-gray-500 text-xl">No items found.</div>
+              <div className="text-center col-span-full text-gray-500 text-xl"></div>
             )}
           </div>
 

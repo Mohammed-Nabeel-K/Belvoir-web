@@ -9,6 +9,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useRouter } from "next/navigation";
 import { Router } from "next/router";
+import LoadingUi from "../../../users/components/ui/loading/loadingui";
 
 const UserListPage = () => {
   const [searchQuery, setSearchQuery] = useState("");
@@ -17,7 +18,7 @@ const UserListPage = () => {
   const [limit, setLimit] = useState(10);
   const [isLoading, setIsLoading] = useState(true);
   const [isFirstLoad, setIsFirstLoad] = useState(true);
-  const router=useRouter()
+  const router = useRouter();
 
   const { data, refetch, isFetching } = UsefetchAllUsers(
     limit,
@@ -61,7 +62,7 @@ const UserListPage = () => {
   };
 
   const handleRowClick = (user) => {
-    router.push(`/admin/users-list/${user.id}`)
+    router.push(`/admin/users-list/${user.id}`);
     // setSelectedUser(user);
   };
 
@@ -93,16 +94,9 @@ const UserListPage = () => {
     <>
       <ToastContainer />
       {(isLoading || isFetching) && isFirstLoad ? (
-        <div className="flex justify-center items-center h-[70%]">
-          <div className="load-row flex space-x-2">
-            <span className="w-4 h-4 bg-blue-700 rounded-full animate-bounce"></span>
-            <span className="w-4 h-4 bg-blue-400 rounded-full animate-bounce delay-150"></span>
-            <span className="w-4 h-4 bg-blue-300 rounded-full animate-bounce delay-300"></span>
-            <span className="w-4 h-4 bg-blue-200 rounded-full animate-bounce delay-450"></span>
-          </div>
-        </div>
+        <LoadingUi />
       ) : (
-        <div className="p-8 bg-gradient-to-r from-blue-50 to-indigo-100 h-full">
+        <div className="p-8  h-full">
           <div className="max-w-7xl mx-auto">
             <div className="flex items-center justify-between mb-8">
               <h1 className="text-3xl font-bold text-gray-700">User List</h1>
@@ -117,19 +111,21 @@ const UserListPage = () => {
             </div>
 
             <div className="grid grid-cols-3 gap-8 mb-8">
-              <div className="bg-white p-6 rounded-xl shadow-sm text-center border border-gray-200">
+              <div className="bg-white p-6 rounded-xl shadow-lg text-center border">
                 <h3 className="text-xl font-bold text-gray-800">Total Users</h3>
                 <p className="text-3xl font-semibold text-gray-900">
                   {totalUsers}
                 </p>
               </div>
-              <div className="bg-white p-6 rounded-xl shadow-sm text-center border border-gray-200">
-                <h3 className="text-xl font-bold text-gray-800">Active Users</h3>
+              <div className="bg-white p-6 rounded-xl shadow-lg  text-center border">
+                <h3 className="text-xl font-bold text-gray-800">
+                  Active Users
+                </h3>
                 <p className="text-3xl font-semibold text-green-500">
                   {activeUsers}
                 </p>
               </div>
-              <div className="bg-white p-6 rounded-xl shadow-sm text-center border border-gray-200">
+              <div className="bg-white p-6 rounded-xl shadow-lg text-center border">
                 <h3 className="text-xl font-bold text-gray-800">
                   Blocked Users
                 </h3>
@@ -138,55 +134,56 @@ const UserListPage = () => {
                 </p>
               </div>
             </div>
-
-            {data?.data?.data?.length === 0 ? (
-              <div className="text-center text-lg font-semibold text-gray-700">
-                User not found
-              </div>
-            ) : (
-              <div className="overflow-x-auto bg-white p-4 rounded-xl shadow-sm border border-gray-300">
-                <table className="min-w-full table-auto border-collapse border border-gray-300">
-                  <thead className="bg-gray-900 text-white rounded-t-lg">
-                    <tr>
-                      <th className="py-3 px-6 border border-gray-300 text-left font-semibold">
+            <div className="overflow-x-auto bg-white p-6 rounded-2xl shadow-lg border border-gray-200">
+              {data?.data?.data?.length === 0 ? (
+                <div className="text-center text-xl font-semibold text-gray-700">
+                  User not found
+                </div>
+              ) : (
+                <table className="w-full border-collapse">
+                  <thead className="bg-gradient-to-r from-gray-900 to-gray-700 text-white">
+                    <tr className="text-left">
+                      <th className="py-4 px-6 font-medium text-lg">
                         Username
                       </th>
-                      <th className="py-3 px-6 border border-gray-300 text-left font-semibold">
-                        Email
-                      </th>
-                      <th className="py-3 px-6 border border-gray-300 text-left font-semibold">
+                      <th className="py-4 px-6 font-medium text-lg">Email</th>
+                      <th className="py-4 px-6 font-medium text-lg">
                         Phone Number
                       </th>
-                      <th className="py-3 px-6 border border-gray-300 text-center font-semibold">
+                      <th className="py-4 px-6 font-medium text-lg text-center">
                         Block
                       </th>
                     </tr>
                   </thead>
                   <tbody>
-                    {data?.data?.data?.map((user) => (
+                    {data?.data?.data?.map((user, index) => (
                       <tr
                         key={user.id}
-                        className="cursor-pointer hover:bg-gray-100"
-                        onClick={() => {
-                          handleRowClick(user);
-                        }}
+                        className={`border-b border-gray-300 hover:bg-gray-100 transition-all ${
+                          index % 2 === 0 ? "bg-gray-50" : "bg-white"
+                        }`}
+                        onClick={() => handleRowClick(user)}
                       >
-                        <td className="py-3 px-6 border border-gray-300">
+                        <td className="py-4 px-6 text-gray-700 font-medium">
                           {user.name}
                         </td>
-                        <td className="py-3 px-6 border border-gray-300">
+                        <td className="py-4 px-6 text-gray-600">
                           {user.email}
                         </td>
-                        <td className="py-3 px-6 border border-gray-300">
+                        <td className="py-4 px-6 text-gray-600">
                           {user.phone}
                         </td>
-                        <td className="py-3 px-6 border border-gray-300 text-center">
+                        <td className="py-4 px-6 text-center">
                           <button
                             onClick={(e) => {
                               e.stopPropagation();
                               toggleStatus(user.id);
                             }}
-                            className="px-6 py-2 rounded-lg text-white bg-yellow-600 hover:bg-opacity-80 transition-all duration-300 shadow-lg"
+                            className={`px-5 py-2 rounded-full text-white font-semibold shadow-md transition-all duration-300 ${
+                              user.isBlocked
+                                ? "bg-yellow-600 hover:bg-yellow-00"
+                                : "bg-yellow-600 hover:bg-yellow-00"
+                            }`}
                           >
                             {user.isBlocked ? "Activate" : "Block"}
                           </button>
@@ -195,8 +192,8 @@ const UserListPage = () => {
                     ))}
                   </tbody>
                 </table>
-              </div>
-            )}
+              )}
+            </div>
 
             {data?.data?.data?.length > 0 && (
               <div className="flex justify-between items-center mt-4 space-x-4 md:space-x-8">
@@ -220,39 +217,7 @@ const UserListPage = () => {
               </div>
             )}
           </div>
-{/* 
-          {selectedUser && (
-            <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-              <div className="bg-white rounded-xl shadow-sm w-1/3 p-6">
-                <h2 className="text-2xl font-bold text-gray-800 mb-4">
-                  User Details
-                </h2>
-                <div className="space-y-2">
-                  <p>
-                    <strong>ID:</strong> {selectedUser.id}
-                  </p>
-                  <p>
-                    <strong>Name:</strong> {selectedUser.name}
-                  </p>
-                  <p>
-                    <strong>Email:</strong> {selectedUser.email}
-                  </p>
-                  <p>
-                    <strong>Phone:</strong> {selectedUser.phone}
-                  </p>
-                </div>
-                <div className="mt-6 flex justify-end">
-                  <button
-                    onClick={closeModal}
-                    className="px-6 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-all duration-300"
-                  >
-                    Close
-                  </button>
-                </div>
-              </div>
-            </div>
-          )}*/}
-         </div> 
+        </div>
       )}
     </>
   );

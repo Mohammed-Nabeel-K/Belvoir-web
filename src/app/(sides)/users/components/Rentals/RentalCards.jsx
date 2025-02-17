@@ -27,7 +27,7 @@ const RentalCards = ({ data, isLoading }) => {
     } catch (error) {
       if (error.response.status == 401) {
         toast.error("please login");
-        rounter.push("/login")
+        rounter.push("/login");
       }
       console.error("cart", error);
     }
@@ -69,17 +69,7 @@ const RentalCards = ({ data, isLoading }) => {
                     onClick={() => addToCart(item)}
                   >
                     Add To Cart
-                    </button>
-
-                <div className="text-gray-900 font-bold text-[12px]">₹{item.offerPrice}</div>
-                <Link href={`/users/rentals/${item.id}`}>
-                  <button className="bg-black text-white rounded-2xl px-4 py-1 hover:bg-white hover:text-black border transition text-[10px]">
-                    View
-
                   </button>
-                  </Link>
-                
-
                   <div className="text-gray-900 font-bold text-[12px]">
                     ₹{item.offerPrice}
                   </div>
@@ -94,7 +84,6 @@ const RentalCards = ({ data, isLoading }) => {
         </div>
       )}
     </div>
-    
   );
 };
 

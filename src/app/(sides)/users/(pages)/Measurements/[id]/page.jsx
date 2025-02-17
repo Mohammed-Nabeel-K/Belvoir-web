@@ -118,7 +118,7 @@ const TailoringMeasurement = ({ params }) => {
       }
        console.log(tailorResponse)
       const tailorProductId = tailorResponse.data?.data?.tailor_product_id;
-      console.log(tailorProductId,"hhhhhhhhhhhhhhhhhhhhhhhhhhhhhssssssssssss")
+     
     if (tailorProductId) {
       localStorage.setItem("tailorProductId", tailorProductId);
     }
@@ -174,10 +174,9 @@ const TailoringMeasurement = ({ params }) => {
           </h2>
 
           <form className="flex flex-col gap-5" onSubmit={handleSubmit}>
-            {/* New Input for Custom Name */}
             <div className="relative">
               <label className="block text-gray-700 font-medium">
-                Measurement Set Name
+                Measurement
               </label>
               <input
                 type="text"
@@ -188,7 +187,6 @@ const TailoringMeasurement = ({ params }) => {
               />
             </div>
 
-            {/* Measurement Inputs */}
             {Object.keys(measurements).map((key) => (
               <div key={key} className="relative">
                 <label className="block text-gray-700 font-medium">

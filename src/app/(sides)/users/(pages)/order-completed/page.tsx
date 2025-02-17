@@ -7,7 +7,7 @@ const PaymentSuccess = () => {
 
   useEffect(() => {
     const timer = setTimeout(() => {
-      router.push("/users/orders"); // Redirect after 5 seconds
+      router.push("/users/orders"); 
     }, 5000);
     return () => clearTimeout(timer);
   }, [router]);
@@ -15,7 +15,6 @@ const PaymentSuccess = () => {
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
       <div className="bg-white p-6 rounded-lg shadow-lg text-center">
-        {/* SVG Success Illustration */}
         <svg
           xmlns="http://www.w3.org/2000/svg"
           viewBox="0 0 24 24"
