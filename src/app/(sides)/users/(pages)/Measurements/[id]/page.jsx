@@ -116,7 +116,6 @@ const TailoringMeasurement = ({ params }) => {
       if (tailorResponse.status !== 201 && tailorResponse.status !== 200) {
         throw new Error("Failed to add tailor product");
       }
-       console.log(tailorResponse)
       const tailorProductId = tailorResponse.data?.data?.tailor_product_id;
      
     if (tailorProductId) {
@@ -125,7 +124,7 @@ const TailoringMeasurement = ({ params }) => {
 
      
       const measurementPayload = {
-        design_id: id,
+        tailor_product_id: tailorProductId,
         set_name: customSetName, 
         values: formattedValues,
       };

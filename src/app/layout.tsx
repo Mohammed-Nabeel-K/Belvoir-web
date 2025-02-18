@@ -1,7 +1,6 @@
 import "../../styles/globals.css";
+import Providers from "../app/Provider/Providers";
 import 'animate.css';
-
-import Providers from "../app/Provider/Providers"
 import { ToastContainer } from "react-toastify";
 export default function Layout({
   children,
@@ -12,14 +11,12 @@ export default function Layout({
         <meta charSet="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </head>
-      <Providers>
       <body>
-        <div className="">
-        <ToastContainer />
-          {children}
-        </div>
+        <Providers>
+            <ToastContainer />
+            <div className="">{children}</div>
+        </Providers>
       </body>
-      </Providers>
     </html>
   );
 }

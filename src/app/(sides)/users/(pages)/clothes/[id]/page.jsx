@@ -8,13 +8,23 @@ import Navbar from "../../../components/ui/navbar/Navbar";
 import RatingCard from "../../../components/Rentals/RatingCard";
 import { useRouter } from "next/navigation";
 import LoadingUi from "../../../components/ui/loading/loadingui";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faStar } from "@fortawesome/free-solid-svg-icons";
 
 export default function ClothDetail({ params }) {
   const { id } = use(params);
   const router = useRouter();
 
   const [cloth, setCloth] = useState(null);
-  const [rating, setRating] = useState([]);
+  const [rating, setrating] = useState({ averageRating: 0, count: 0, ratings: [] });
+  const [userRating, setUserRating] = useState(0);
+  const [reviewMessage, setReviewMessage] = useState("");
+  const [ratingloading, setratingloading] = useState(false);
+  const [stars, setstars] = useState({
+    fullstar: "",
+    halfstar: "",
+  });
+  const [handlmore, sethandlmore] = useState(true);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -22,14 +32,16 @@ export default function ClothDetail({ params }) {
         const res = await axiosInstance.get(`/Clothes/${id}`);
         setCloth(res.data.data);
 
-        const ratingRes = await axiosInstance.get(`/Clothes/cloth-rating`, {
-          params: { productid: id },
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("userData")}`,
-          },
+        const ratingres = await axiosInstance.get(`/Rating/get`, {
+          params: { entityId: id, rating_to: "cloth" },
         });
-
-        setRating(ratingRes.data.data);
+        console.log(ratingres.data.data);
+        
+        setrating(ratingres.data.data);
+        const fullStars = Math.floor(rating.averageRating);
+        const halfStar = rating.averageRating % 1 >= 0.5 ? 1 : 0;
+        setstars({ fullstar: fullStars, halfstar: halfStar });
+        setratingloading(false);
       } catch (error) {
         console.error("Error fetching cloth details:", error);
         notFound();
@@ -39,6 +51,43 @@ export default function ClothDetail({ params }) {
     fetchData();
   }, [id]);
 
+  const handleRatingSubmit = async () => {
+    if (userRating === 0 || reviewMessage.trim() === "") {
+      toast.error("Please select a rating and enter a review message.");
+      return;
+    }
+    try {
+      const response = await axiosInstance.post(
+        "/Rating/Add",
+        {
+          message: reviewMessage,
+          ratingvalue: userRating,
+        },
+        {
+          params: {
+            entityId: id,
+            rating_to: "cloth",
+          },
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("userData")}`,
+          },
+        }
+      );
+      toast.success("Review submitted successfully!");
+      setUserRating(0);
+      setReviewMessage("");
+    } catch (error) {
+      if (error.response.status == 400) {
+        toast.error("User already reviewed for this product!");
+      } else {
+        toast.error("Failed to submit review. Please try again.");
+      }
+      if (error.response.status == 401) {
+        toast.error("please login");
+        router.push("/login");
+      }
+    }
+  };
   const handleSelectCloth = () => {
     localStorage.setItem("selectedCloth", JSON.stringify(cloth));
     router.push("/users/Design");
@@ -82,42 +131,100 @@ export default function ClothDetail({ params }) {
           </div>
         </div>
 
+        {/* Ratings */}
         <div className="mt-6">
           <h3 className="text-lg font-semibold">Customer Ratings</h3>
           <div className="flex items-center gap-2 mt-2">
-            <span className="text-2xl font-bold">4.5</span>
+            <span className="text-2xl font-bold">{rating?.averageRating}</span>
             <div className="flex">
-              {[...Array(5)].map((_, i) => (
+              {/* Render full stars */}
+              {rating?.averageRating != 0 &&
+                [...Array(stars?.fullstar)].map((_, i) => (
+                  <svg
+                    key={`full-${i}`}
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 24 24"
+                    fill="#FFD700"
+                    className="w-6 h-6"
+                  >
+                    <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
+                  </svg>
+                ))}
+
+              {/* Render half star */}
+              {stars?.halfstar === 1 && (
                 <svg
-                  key={i}
                   xmlns="http://www.w3.org/2000/svg"
                   viewBox="0 0 24 24"
-                  fill={i < 4.5 ? "#FFD700" : "#D1D5DB"}
+                  fill="#FFD700"
                   className="w-6 h-6"
                 >
                   <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
                 </svg>
+              )}
+            </div>
+            <span className="text-gray-600">({rating?.count} reviews)</span>
+          </div>
+          {/* add Rating */}
+          <div className="mt-6 p-6 rounded-lg ">
+            <h3 className="text-lg ">Leave a Review</h3>
+            <div className="flex items-center mt-2">
+              {[1, 2, 3, 4, 5].map((star) => (
+                <FontAwesomeIcon
+                  key={star}
+                  icon={faStar}
+                  className={`text-2xl cursor-pointer mx-1 ${
+                    userRating >= star ? "text-yellow-500" : "text-gray-300"
+                  }`}
+                  onClick={() => setUserRating(star)}
+                />
               ))}
             </div>
-            <span className="text-gray-600">(250 reviews)</span>
+            <textarea
+              className="w-full mt-3 p-2 border rounded-lg"
+              rows="3"
+              placeholder="Write your review..."
+              value={reviewMessage}
+              onChange={(e) => setReviewMessage(e.target.value)}
+            ></textarea>
+            <button
+              className="mt-3 bg-[#0E0E25] text-white px-4 py-2 rounded-lg "
+              onClick={() => handleRatingSubmit()}
+            >
+              Submit Review
+            </button>
           </div>
 
           <div className="mt-4">
-            <div className="grid gap-2 lg:grid-cols-3 sm:grid-cols-12">
-              {rating.length > 0 ? (
-                rating
-                  .slice(0, 6)
-                  .map((x, i) => <RatingCard key={i} data={x} />)
+            <h4 className="text-md font-medium">Rating Review</h4>
+            <div className="grid gap-2 lg:grid-cols-3 sm:grid-cols-12 relative">
+              {rating ? (
+                handlmore ? (
+                  rating?.ratings
+                    .slice(0, 3)
+                    .map((x, i) => <RatingCard key={i} data={x} />)
+                ) : (
+                  rating?.ratings.map((x, i) => <RatingCard key={i} data={x} />)
+                )
               ) : (
-                <div className="text-gray-500 ">No Reviews Yet..</div>
+                <div className="text-gray-500">No Reviews Yet..</div>
               )}
             </div>
 
-            {rating.length > 6 && (
-              <button className="p-3 rounded-[20px] bg-[#0F172A] my-4 w-max text-white text-[12px] block m-auto">
-                View More
-              </button>
-            )}
+            <div className="flex justify-between mt-4">
+              {ratingloading && <p className="text-gray-500">Loading...</p>}
+              {rating && rating.Length > 3 && (
+                <button
+                  className="p-3 rounded-[20px] bg-[#0F172A] my-4 w-max text-white text-[12px] block m-auto"
+                  onClick={() => {
+                    sethandlmore(!handlmore);
+                    setratingloading(true);
+                  }}
+                >
+                  {handlmore ? "View more" : "View less"}
+                </button>
+              )}
+            </div>
           </div>
         </div>
 

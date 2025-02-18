@@ -6,13 +6,13 @@ import axiosInstance from "../../../../../../axios/axiosinstance/axiosInstance";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import {useRouter} from "next/navigation"
-
 export default function UserProfile() {
   const [data, setdata] = useState();
   const router = useRouter();
   const [showModal, setShowModal] = useState(false);
   const [oldPassword, setOldPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
+
 
   const recentServices = [
     {
@@ -213,6 +213,7 @@ export default function UserProfile() {
                 </h3>
                 <p className="text-gray-600 text-sm">Saved items for later</p>
               </Link>
+
             </button>
             <button className="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow">
               <Link href={"/users/Address"}>

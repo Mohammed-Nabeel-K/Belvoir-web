@@ -57,11 +57,8 @@ export default function RentalDetail() {
           (x) => x.isPrimary
         )?.imagePath;
         setactiveimage(defaultimg);
-        const ratingres = await axiosInstance.get(`/Rental/rental-rating`, {
-          params: { productid: id },
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("userData")}`,
-          },
+        const ratingres = await axiosInstance.get(`/Rating/get`, {
+          params: { entityId: id, rating_to: "rental" },
         });
 
         setrating(ratingres.data.data);
@@ -96,7 +93,7 @@ export default function RentalDetail() {
     fetchData();
   }, [handlmore]);
 
-  if (loading) return <LoadingUi/>
+  if (loading) return <LoadingUi />;
   if (cloth == null) return notFound();
 
   const handleRatingSubmit = async () => {
@@ -105,15 +102,16 @@ export default function RentalDetail() {
       return;
     }
     try {
-      const response=await axiosInstance.post(
-        "/Rental/rental-rating",
+      const response = await axiosInstance.post(
+        "/Rating/Add",
         {
-          message: reviewMessage, 
-          ratingvalue: userRating, 
+          message: reviewMessage,
+          ratingvalue: userRating,
         },
         {
           params: {
-            productid: id, 
+            entityId: id,
+            rating_to: "rental",
           },
           headers: {
             Authorization: `Bearer ${localStorage.getItem("userData")}`,
@@ -121,14 +119,14 @@ export default function RentalDetail() {
         }
       );
       toast.success("Review submitted successfully!");
-     
+
       setUserRating(0);
       setReviewMessage("");
     } catch (error) {
-      if (error.response.status==400) {
+      if (error.response.status == 400) {
         toast.error("User already reviewed for this product!");
-      }else{
-      toast.error("Failed to submit review. Please try again.");
+      } else {
+        toast.error("Failed to submit review. Please try again.");
       }
       if (error.response.status == 401) {
         toast.error("please login");
@@ -287,7 +285,7 @@ export default function RentalDetail() {
               ></textarea>
               <button
                 className="mt-3 bg-[#0E0E25] text-white px-4 py-2 rounded-lg "
-                onClick={()=>handleRatingSubmit()}
+                onClick={() => handleRatingSubmit()}
               >
                 Submit Review
               </button>
@@ -296,18 +294,18 @@ export default function RentalDetail() {
             <div className="mt-4">
               <h4 className="text-md font-medium">Rating Review</h4>
               <div className="grid gap-2 lg:grid-cols-3 sm:grid-cols-12 relative">
-                {rating ? (
+                {rating?.ratings?.length > 0 ? (
                   handlmore ? (
-                    rating?.ratings
+                    rating.ratings
                       .slice(0, 3)
                       .map((x, i) => <RatingCard key={i} data={x} />)
                   ) : (
-                    rating?.ratings.map((x, i) => (
+                    rating.ratings.map((x, i) => (
                       <RatingCard key={i} data={x} />
                     ))
                   )
                 ) : (
-                  <div className="text-gray-500">No Reviews Yet..</div>
+                  <div className="text-gray-500">No Reviews Yet...</div>
                 )}
               </div>
 
