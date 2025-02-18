@@ -139,7 +139,7 @@ export default function UserProfile() {
           </div>
 
 
-           <div className="bg-white rounded-lg shadow-md p-6 mt-6">
+          <div className="bg-white rounded-lg shadow-md p-6 mt-6">
           {showModal && (
             <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
               <div className="bg-white p-6 rounded-lg shadow-lg w-96">
@@ -175,7 +175,7 @@ export default function UserProfile() {
               </div>
             </div>
           )}
-
+          </div>
           {/* Account Details */}
           <div className="bg-white rounded-lg shadow-md p-6 mt-6">
             <h2 className="text-xl font-semibold text-gray-800 mb-4">
