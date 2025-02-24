@@ -71,7 +71,7 @@ export default function DesignDetail({ params }) {
   };
 
   if (loading) return <LoadingUi />;
-  if (!design) return null;
+  // if (!design) return null;
 
   return (
     <>

@@ -6,8 +6,6 @@ import axiosInstance from "../../../../../../axios/axiosinstance/axiosInstance";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import {useRouter} from "next/navigation"
-import {Heart,Box,Zap} from 'lucide-react'
-import Link from 'next/link';
 export default function UserProfile() {
   const [data, setdata] = useState();
   const router = useRouter();

@@ -13,58 +13,57 @@ function Container() {
 
   const [Material, setMaterial] = useState([]);
   const [designPattern, setDesignPattern] = useState([]);
-  const [pageNo, setPageNo] = useState(1); 
+  const [pageNo, setPageNo] = useState(1);
   const [hasMore, setHasMore] = useState(true);
-  const [minPrice,setMinPrice]=useState("");
-  const [maxPrice,setMaxPrice]=useState("");
-  const [Color,setColor]=useState([]);
+  const [minPrice, setMinPrice] = useState("");
+  const [maxPrice, setMaxPrice] = useState("");
+  const [Color, setColor] = useState([]);
 
+  const pageSize = 10;
 
-
-
-  const pageSize = 10; 
-
-
-
-
-  const { data, isLoading } = useFetchAllClothes(query,"price",sort,Material,Color,designPattern,minPrice,maxPrice,pageNo,pageSize);
+  const { data, isLoading } = useFetchAllClothes(
+    query,
+    "price",
+    sort,
+    Material,
+    Color,
+    designPattern,
+    minPrice,
+    maxPrice,
+    pageNo,
+    pageSize
+  );
   const [filteredData, setFilteredData] = useState([]);
   // console.log(Material)
 
-
-  
   useEffect(() => {
     if (data?.data) {
-  
       // console.log(data.data)
       if (pageNo === 1) {
         setFilteredData(data.data);
       } else {
-      
         setFilteredData((prev) => [...prev, ...data.data]);
       }
 
-     
-
       if (data.data.length < pageSize) {
-        setHasMore(false); 
+        setHasMore(false);
       }
     }
-  }, [data, pageNo, pageSize,Material]);
+  }, [data, pageNo, pageSize, Material]);
 
-
- 
   useEffect(() => {
     const handleScroll = () => {
-      const { scrollTop, clientHeight, scrollHeight } = document.documentElement;
+      const { scrollTop, clientHeight, scrollHeight } =
+        document.documentElement;
 
-     
-
-      if (scrollTop + clientHeight >= scrollHeight - 10 && !isLoading && hasMore) {
-        setPageNo((prev) => prev + 1); 
+      if (
+        scrollTop + clientHeight >= scrollHeight - 10 &&
+        !isLoading &&
+        hasMore
+      ) {
+        setPageNo((prev) => prev + 1);
       }
     };
-
 
     window.addEventListener("scroll", handleScroll);
 
@@ -150,26 +149,41 @@ function Container() {
 
       <div className="flex">
         <div className="hidden md:block">
-          <Filter setMaterial={setMaterial} Material={Material} setDesignPattern={setDesignPattern} setMinPrice={setMinPrice} setMaxPrice={setMaxPrice} setColor={setColor} />
+          <Filter
+            setMaterial={setMaterial}
+            Material={Material}
+            setDesignPattern={setDesignPattern}
+            setMinPrice={setMinPrice}
+            setMaxPrice={setMaxPrice}
+            setColor={setColor}
+          />
         </div>
 
         {filterOpen && (
           <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex justify-end">
             <div className="w-3/4 sm:w-1/2 bg-white h-full p-4 shadow-lg transform translate-x-0 transition-transform">
-              <button onClick={() => setFilterOpen(false)} className="absolute top-4 right-4">
+              <button
+                onClick={() => setFilterOpen(false)}
+                className="absolute top-4 right-4"
+              >
                 <X size={24} />
               </button>
-              <Filter setMaterial={setMaterial} Material={Material} setDesignPattern={setDesignPattern} setMinPrice={setMinPrice} setMaxPrice={setMaxPrice} setColor={setColor} />
-
+              <Filter
+                setMaterial={setMaterial}
+                Material={Material}
+                setDesignPattern={setDesignPattern}
+                setMinPrice={setMinPrice}
+                setMaxPrice={setMaxPrice}
+                setColor={setColor}
+              />
             </div>
           </div>
         )}
 
         <ClothCards isLoading={isLoading} filteredData={filteredData} />
-        
       </div>
       <div>
-      {/* {isLoading && <div className="text-center py-4">Loading more clothes...</div>}
+        {/* {isLoading && <div className="text-center py-4">Loading more clothes...</div>}
       {!hasMore && <div className="text-center py-4">No more clothes to load.</div>} */}
       </div>
     </main>
